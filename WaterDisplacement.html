@@ -71,6 +71,7 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
 .stbtn{flex:1;padding:6px 4px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:.9rem;cursor:pointer}
 .stbtn[aria-pressed="true"]{border-color:var(--aqua);background:var(--aquaS);font-weight:700}
 .stout{flex:.8;border-color:var(--amber)}
+.stbtn:disabled{opacity:.4;cursor:not-allowed}
 .ans{margin-top:14px;padding:12px;border:1.5px solid var(--amber);border-radius:12px;font-weight:700;font-size:1.05rem}
 .ans input{width:5em;margin:0 6px;padding:4px 8px;font:inherit;text-align:center;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
 .ans input:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-color:var(--amber)}
@@ -130,7 +131,7 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   <div class="card">
     <p class="qno" id="qno"></p>
     <div class="eq" id="eq"></div>
-    <p class="tip">點選下面嘅詞語填入空格；點返空格可以清除。</p>
+    <p class="tip">點選下面的詞語填入空格；點選空格可以清除。</p>
     <div class="chips" id="chips"></div>
     <button class="btn" id="check" disabled>檢查答案</button>
     <p id="fb" role="status"></p>
@@ -141,12 +142,12 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   <p class="sys">解鎖成功</p>
   <h1>排水法模擬室</h1>
   <p class="formula">體積 = 底面積 × 高　　高 = 體積 ÷ 底面積</p>
-  <p class="tip">揀一個部分開始探索。</p>
+  <p class="tip">請選擇一個部分開始探索。</p>
   <div class="parts">
-    <button class="part" data-p="1"><b>第一部分：閱讀量杯</b><span>放入石頭，睇溢出嘅水流入量杯，讀出石頭嘅體積。</span></button>
-    <button class="part" data-p="2"><b>第二部分：閱讀量杯（二）</b><span>石頭放入已有水嘅量杯，睇水位上升，搵出石頭嘅體積。</span></button>
-    <button class="part" data-p="3"><b>第三部分：排水法與水缸</b><span>石頭排出嘅水流入長方體水缸，用長、闊、水位的高計算石頭體積。</span></button>
-    <button class="part" data-p="4"><b>第四部分：排水法應用</b><span>已知石頭體積同水缸嘅長、闊，睇水位上升咗幾多。</span></button>
+    <button class="part" data-p="1"><b>第一部分：閱讀量杯</b><span>放入石頭，觀察溢出的水流入量杯，讀出石頭的體積。</span></button>
+    <button class="part" data-p="2"><b>第二部分：閱讀量杯（二）</b><span>石頭放入已有水的量杯，觀察水位上升，找出石頭的體積。</span></button>
+    <button class="part" data-p="3"><b>第三部分：排水法與水缸</b><span>石頭排出的水流入長方體水缸，利用長、闊、水位的高計算石頭的體積。</span></button>
+    <button class="part" data-p="4"><b>第四部分：排水法應用</b><span>已知石頭體積和水缸的長、闊，求水位上升了多少。</span></button>
   </div>
   <p id="soon" role="status"></p>
 </section>
@@ -155,7 +156,7 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   <p class="sys">第一部分</p>
   <h1>閱讀量杯</h1>
   <div class="lab">
-    <div class="stage"><canvas id="cv" role="img" aria-label="格仔地面上嘅長方體水缸"></canvas></div>
+    <div class="stage"><canvas id="cv" role="img" aria-label="格子地面上的長方體水缸"></canvas></div>
     <div class="card">
       <div class="row"><label for="rl">長度</label><output id="ol">5 cm</output></div>
       <input type="range" id="rl" min="3" max="10" step="1" value="5">
@@ -169,7 +170,7 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
       <div class="stones"><button class="stbtn" data-s="A" aria-pressed="false">石頭A</button><button class="stbtn" data-s="B" aria-pressed="false">石頭B</button><button class="stbtn" data-s="C" aria-pressed="false">石頭C</button><button class="stbtn stout" id="stout" data-s="out">取出</button></div>
       <p id="stmsg" role="status"></p>
       <button class="btn" id="zoom" aria-pressed="false">量杯</button>
-      <p class="tip">撳一下放一粒石頭（最多 3 粒，只可以放同一種）。睇溢出嘅水流入量杯，量杯每小格 20 mL，每大格 100 mL，讀出水量就知道石頭嘅體積。</p>
+      <p class="tip">按一下放入一顆石頭（最多 3 顆，只可以放同一種）。觀察溢出的水流入量杯，量杯每小格 20 mL，每大格 100 mL，讀出水量就知道石頭的體積。</p>
       <div class="views"><button class="chip" id="vTop">俯視</button><button class="chip" id="v3d">立體</button></div>
       <div class="ans" id="ans" hidden><label for="ain">石頭<span id="aname"></span>的體積是<input id="ain" type="text" inputmode="decimal" autocomplete="off" maxlength="6">cm³</label>
         <button class="btn" id="ack" type="button" style="margin-top:10px">檢查答案</button>
@@ -183,16 +184,16 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   <p class="sys">第二部分</p>
   <h1>閱讀量杯（二）</h1>
   <div class="lab">
-    <div class="stage"><canvas id="cv2" role="img" aria-label="已經有水嘅量杯，可以放入石頭"></canvas></div>
+    <div class="stage"><canvas id="cv2" role="img" aria-label="已經有水的量杯，可以放入石頭"></canvas></div>
     <div class="card">
-      <div class="row"><span>置入不規則石頭</span></div>
-      <div class="stones"><button class="stbtn" data-s="A" aria-pressed="false">石頭A</button><button class="stbtn" data-s="B" aria-pressed="false">石頭B</button><button class="stbtn" data-s="C" aria-pressed="false">石頭C</button><button class="stbtn stout" id="out2">取出</button></div>
-      <p id="m2" role="status"></p>
-      <p class="tip">量杯入面本來已經有水。撳一下放一粒石頭（最多 3 粒，只可以放同一種）。睇水位升咗幾多，量杯每小格 100 mL，每大格 500 mL，最多 1 L。</p>
-      <div class="ans" id="a2o"><label for="i2o">量杯內原有水<input id="i2o" type="text" inputmode="decimal" autocomplete="off" maxlength="6">mL</label>
+      <p class="tip" style="margin-top:0">量杯內本來已經有水。請依照步驟：先讀出量杯內原有的水量，再放入石頭，最後找出石頭的體積。量杯每小格 100 mL，每大格 500 mL，最多 1 L。</p>
+      <div class="ans" id="a2o" style="margin-top:0"><p class="note" style="margin:0 0 6px">步驟 1</p><label for="i2o">量杯內原有水<input id="i2o" type="text" inputmode="decimal" autocomplete="off" maxlength="6">mL</label>
         <button class="btn" id="k2o" type="button" style="margin-top:10px">檢查答案</button>
         <p id="f2o" role="status"></p></div>
-      <div class="ans" id="a2" hidden><label for="i2">石頭<span id="n2"></span>的體積是<input id="i2" type="text" inputmode="decimal" autocomplete="off" maxlength="6">cm³</label>
+      <div class="row" style="margin-top:16px"><span>步驟 2：置入不規則石頭</span></div>
+      <div class="stones"><button class="stbtn" data-s="A" aria-pressed="false">石頭A</button><button class="stbtn" data-s="B" aria-pressed="false">石頭B</button><button class="stbtn" data-s="C" aria-pressed="false">石頭C</button><button class="stbtn stout" id="out2">取出</button></div>
+      <p id="m2" role="status"></p>
+      <div class="ans" id="a2" hidden><p class="note" style="margin:0 0 6px">步驟 3</p><label for="i2">石頭<span id="n2"></span>的體積是<input id="i2" type="text" inputmode="decimal" autocomplete="off" maxlength="6">cm³</label>
         <button class="btn" id="k2" type="button" style="margin-top:10px">檢查答案</button>
         <p id="f2" role="status"></p></div>
     </div>
@@ -204,13 +205,14 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   <p class="sys">第三部分</p>
   <h1>排水法與水缸</h1>
   <div class="lab">
-    <div class="stage"><canvas id="cv3" role="img" aria-label="排水法：石頭放入溢水杯，溢出嘅水流入長方體水缸"></canvas></div>
+    <div class="stage"><canvas id="cv3" role="img" aria-label="排水法：石頭放入溢水杯，溢出的水流入長方體水缸"></canvas></div>
     <div class="card">
       <div class="row"><span>置入不規則石頭</span></div>
       <div class="stones"><button class="stbtn" data-s="A" aria-pressed="false">石頭A</button><button class="stbtn" data-s="B" aria-pressed="false">石頭B</button><button class="stbtn" data-s="C" aria-pressed="false">石頭C</button><button class="stbtn stout" id="out3">取出</button></div>
       <p id="m3" role="status"></p>
-      <p class="tip">石頭放入左面嘅杯，溢出嘅水會流入右面嘅長方體水缸。撳一下放一粒石頭（最多 3 粒，只可以放同一種）。睇水缸嘅長、闊同水位的高，就可以搵出石頭嘅體積。</p>
+      <p class="tip">石頭放入左邊的杯，溢出的水會流入右邊的長方體水缸。按一下放入一顆石頭（最多 3 顆，只可以放同一種）。觀察水缸的長、闊和水位的高，就可以找出石頭的體積。</p>
       <div class="ans" id="a3" hidden><label for="i3">石頭<span id="n3"></span>的體積是<input id="i3" type="text" inputmode="decimal" autocomplete="off" maxlength="6">cm³</label>
+        <p class="note">提示：長方體的體積 = 長 × 闊 × 高</p>
         <button class="btn" id="k3" type="button" style="margin-top:10px">檢查答案</button>
         <p id="f3" role="status"></p></div>
     </div>
@@ -231,9 +233,9 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
       <input type="range" id="rw4" min="4" max="10" step="1" value="5">
       <button class="btn" id="ar4" type="button" aria-pressed="false">顯示底面積</button>
       <button class="btn" id="tg4" type="button" aria-pressed="false">放入石頭</button>
-      <p class="tip">用滑桿改變水缸嘅長同闊，再放入石頭，睇水位上升咗幾多。拖曳畫面可以轉視角。</p>
-      <div class="ans"><label for="i4">水位上升咗<input id="i4" type="text" inputmode="decimal" autocomplete="off" maxlength="6">cm</label>
-        <p class="note">如果除唔盡，請四捨五入至小數後兩位。</p>
+      <p class="tip">用滑桿改變水缸的長和闊，再放入石頭，觀察水位上升了多少。拖曳畫面可以轉換視角。</p>
+      <div class="ans"><label for="i4">水位上升了<input id="i4" type="text" inputmode="decimal" autocomplete="off" maxlength="6">cm</label>
+        <p class="note">如果除不盡，請四捨五入至小數後兩位。</p>
         <button class="btn" id="k4" type="button" style="margin-top:10px">檢查答案</button>
         <p id="f4" role="status"></p></div>
     </div>
@@ -244,9 +246,9 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
 <script>
 (function(){
   var Q=[
-    {lhs:'底面積',op:'×',ans:['長','闊'],ordered:false,chips:['高','體積','闊','長'],hint:'長方形嘅面積 = 長 × 闊。'},
-    {lhs:'體積',op:'×',ans:['底面積','高'],ordered:false,chips:['高','體積','長','闊','底面積'],hint:'長方體（水缸）嘅體積 = 底面積 × 高，再諗諗邊兩個先啱。'},
-    {lhs:'高',op:'÷',ans:['體積','底面積'],ordered:true,chips:['底面積','體積'],hint:'由 體積 = 底面積 × 高 倒轉嚟諗：高 = 體積 ÷ 底面積。'}
+    {lhs:'底面積',op:'×',ans:['長','闊'],ordered:false,chips:['高','體積','闊','長'],hint:'長方形的面積 = 長 × 闊。'},
+    {lhs:'體積',op:'×',ans:['底面積','高'],ordered:false,chips:['高','體積','長','闊','底面積'],hint:'長方體（水缸）的體積 = 底面積 × 高，再想想是哪兩個。'},
+    {lhs:'高',op:'÷',ans:['體積','底面積'],ordered:true,chips:['底面積','體積'],hint:'由 體積 = 底面積 × 高 反過來想：高 = 體積 ÷ 底面積。'}
   ];
   var cls={'底面積':'baseOn','高':'hOn','體積':'volOn','長':'lenOn','闊':'widOn'};
   var qi=0,fill=[null,null];
@@ -298,12 +300,12 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
       }
     }else{
       var swap=q.ordered&&fill[0]===a[1]&&fill[1]===a[0];
-      say(swap?'兩個詞語啱，但次序反咗：邊個除以邊個？'+q.hint:'未啱，再試下。提示：'+q.hint,'no');
+      say(swap?'兩個詞語正確，但次序顛倒了：哪個除以哪個？'+q.hint:'不正確，再試一次。提示：'+q.hint,'no');
       eq.classList.remove('shake');void eq.offsetWidth;eq.classList.add('shake');
     }
   };
   document.querySelectorAll('.part').forEach(function(b){
-    b.onclick=function(){document.getElementById('soon').textContent='第'+['','一','二','三','四'][+b.dataset.p]+'部分製作中，下一步先整。';};
+    b.onclick=function(){document.getElementById('soon').textContent='第'+['','一','二','三','四'][+b.dataset.p]+'部分製作中，敬請期待。';};
   });
   render();
 })();
@@ -333,7 +335,7 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
     ctx.fillStyle=C.ink;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t,p[0],p[1]+1);
   }
   var msg=document.getElementById('stmsg');
-  var ST={A:{v:30,d:[3,2.6,2.8],s:1},B:{v:90,d:[4.3,3.7,4],s:2},C:{v:150,d:[5.1,4.4,4.8],s:3}},TK=.6,CX=12.4,CZ=2.5,CR=1.3,CH=6;
+  var ST={A:{v:30,d:[3,2.6,2.8],s:1},B:{v:80,d:[4.1,3.6,3.85],s:2},C:{v:150,d:[5.1,4.4,4.8],s:3}},TK=.6,CX=12.4,CZ=2.5,CR=1.3,CH=6;
   var FA=[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],[3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]];
   function mk(o){
     var t=(1+Math.sqrt(5))/2,b=[[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],[t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]],mn=1e9,mx=-1e9,x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;
@@ -361,13 +363,13 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
     if(!st)return;
     var run=false,i;
     for(i=0;i<ns.length;i++)if(pr(i)<1)run=true;
-    if(run){say('等水流完先再檢查。','');return;}
+    if(run){say('請等水流完畢後再檢查。','');return;}
     var n=ns.length,v=ST[st].v,tot=n*v,txt=ain.value.trim(),x=parseFloat(txt);
-    if(tot>200){say('量杯已經溢出，量度唔到。請撳「取出」，用少啲石頭再量度。','no');return;}
+    if(tot>200){say('量杯已經溢出，無法量度。請按「取出」，減少石頭的數量再量度。','no');return;}
     if(txt===''||isNaN(x)){say('請先輸入數字。','no');return;}
-    if(Math.abs(x-v)<1e-6){say('答啱喇！石頭'+st+'嘅體積係 '+v+' cm³。','ok');return;}
-    if(n>1&&Math.abs(x-tot)<1e-6){say('你輸入嘅係 '+n+' 粒石頭嘅總體積。一粒石頭嘅體積係幾多？','no');return;}
-    say('未啱，再睇下量杯水位喺邊兩條刻度之間，每小格係 20 mL。','no');
+    if(Math.abs(x-v)<1e-6){say('答對了！石頭'+st+'的體積是 '+v+' cm³。','ok');return;}
+    if(n>1&&Math.abs(x-tot)<1e-6){say('你輸入的是 '+n+' 顆石頭的總體積。一顆石頭的體積是多少？','no');return;}
+    say('不正確，再看看量杯的水位在哪兩條刻度之間，每小格是 20 mL。','no');
   };
   function mark(){document.querySelectorAll('#p1 .stbtn:not(.stout)').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.s===st?'true':'false');});ans.hidden=!st;afb.textContent='';if(st!==lastSt){ain.value='';lastSt=st;}if(st)an2.textContent=st;}
   var POS=[[.3,.62],[.7,.62],[.5,.3]];
@@ -388,12 +390,37 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
     idx.sort(function(a,b){return P(L*POS[b][0],stY(b)+1,W*POS[b][1])[2]-P(L*POS[a][0],stY(a)+1,W*POS[a][1])[2];});
     idx.forEach(function(i2){stone(i2);});
   }
+  function fcam(){return [Math.sin(yaw),-Math.cos(yaw)];}
+  function wcyl(cx,cz,r,y0,y1){
+    if(y1<=y0)return;
+    var n=40,k,f=fcam(),top=[];
+    for(k=0;k<n;k++){
+      var a0=6.2832*k/n,a1=6.2832*(k+1)/n,am=(a0+a1)/2,fa=Math.cos(am)*f[0]+Math.sin(am)*f[1];
+      poly([[cx+r*Math.cos(a0),y0,cz+r*Math.sin(a0)],[cx+r*Math.cos(a1),y0,cz+r*Math.sin(a1)],[cx+r*Math.cos(a1),y1,cz+r*Math.sin(a1)],[cx+r*Math.cos(a0),y1,cz+r*Math.sin(a0)]],C.aqua,fa>0?.3+.2*fa:.13);
+      top.push([cx+r*Math.cos(a0),y1,cz+r*Math.sin(a0)]);
+    }
+    poly(top,C.aqua,.5);
+    ctx.strokeStyle=C.aqua;ctx.lineWidth=3.5;ctx.beginPath();
+    top.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});
+    ctx.closePath();ctx.stroke();
+  }
+  function gbody(cx,cz,r,y0,y1){
+    var n=40,k,f=fcam(),bot=[];
+    for(k=0;k<n;k++){
+      var a0=6.2832*k/n,a1=6.2832*(k+1)/n,am=(a0+a1)/2,fa=Math.cos(am)*f[0]+Math.sin(am)*f[1];
+      bot.push([cx+r*Math.cos(a0),y0,cz+r*Math.sin(a0)]);
+      if(fa>0)poly([[cx+r*Math.cos(a0),y0,cz+r*Math.sin(a0)],[cx+r*Math.cos(a1),y0,cz+r*Math.sin(a1)],[cx+r*Math.cos(a1),y1,cz+r*Math.sin(a1)],[cx+r*Math.cos(a0),y1,cz+r*Math.sin(a0)]],C.mut,.05);
+    }
+    poly(bot,C.mut,.08);
+  }
+  function bf(i){var n=[[0,-1],[1,0],[0,1],[-1,0]][i];return n[0]*Math.sin(yaw)-n[1]*Math.cos(yaw);}
   function cyl(){
     var ly=Math.min(cylV(),200)/20*TK,n=28,k,r0=[],r1=[],rl=[];
     for(k=0;k<n;k++){var a=6.2832*k/n,x=CX+CR*Math.cos(a),z=CZ+CR*Math.sin(a);r0.push([x,0,z]);r1.push([x,CH,z]);rl.push([x,ly,z]);}
     var ov=cylV()-200;
     if(ov>0){var R=CR+.5+1.6*cl(ov/250),pd=[];for(k=0;k<n;k++){var a2=6.2832*k/n;pd.push([CX+R*Math.cos(a2),.02,CZ+R*Math.sin(a2)]);}poly(pd,C.aqua,.35);}
-    if(ly>0){for(k=0;k<n;k++)poly([r0[k],r0[(k+1)%n],rl[(k+1)%n],rl[k]],C.aqua,.22);poly(rl,C.aqua,.4);}
+    gbody(CX,CZ,CR,0,CH);
+    if(ly>0)wcyl(CX,CZ,CR,0,ly);
     ctx.strokeStyle=C.mut;ctx.lineWidth=2;
     [r0,r1].forEach(function(rg){ctx.beginPath();rg.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.stroke();});
     var c=Math.cos(yaw),s=Math.sin(yaw);
@@ -427,7 +454,7 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   function note(done){
     if(!st)return;
     var t=ns.length*ST[st].v;
-    msg.textContent='水缸入面有 '+ns.length+' 粒石頭'+st+'。'+(done&&t>200?'量杯容量得 200 mL，水已經溢出，量度唔到石頭嘅體積。':'');
+    msg.textContent='水缸內有 '+ns.length+' 顆石頭'+st+'。'+(done&&t>200?'量杯的容量只有 200 mL，水已經溢出，無法量度石頭的體積。':'');
   }
   function tick(){
     draw();
@@ -438,15 +465,15 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   function kick(){if(!raf)raf=requestAnimationFrame(tick);}
   function clr(m){st=null;ns=[];mark();msg.textContent=m;draw();}
   function put(k){
-    if(st&&st!==k){msg.textContent='水缸入面已經有石頭'+st+'，要先撳「取出」先可以換石頭。';return;}
-    if(ns.length>=3){msg.textContent='最多只可以放 3 粒石頭。';return;}
-    if(!fits(k)){msg.textContent='石頭'+k+'放唔落：水缸太細或水位太低。';return;}
+    if(st&&st!==k){msg.textContent='水缸內已經有石頭'+st+'，請先按「取出」才可以更換石頭。';return;}
+    if(ns.length>=3){msg.textContent='最多只可以放 3 顆石頭。';return;}
+    if(!fits(k)){msg.textContent='石頭'+k+'放不下：水缸太小或水位太低。';return;}
     st=k;ns.push(performance.now());mark();note(false);kick();
   }
   function chk(h0){
     if(!st)return;
-    if(h!==h0){clr('水位改變咗，已取出石頭，請重新放入。');return;}
-    if(!fits(st))clr('水缸太細，石頭放唔落，已取出。');
+    if(h!==h0){clr('水位已改變，已取出石頭，請重新放入。');return;}
+    if(!fits(st))clr('水缸太小，石頭放不下，已取出。');
   }
   function draw(){
     if(!cw)return;
@@ -460,9 +487,9 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
     cyl();drawStones(false);
     var b=[[0,0,0],[L,0,0],[L,0,W],[0,0,W]],t=b.map(function(a){return [a[0],H,a[2]];});
     var hw=h+bump(),wl=b.map(function(a){return [a[0],hw,a[2]];});
-    for(i=0;i<4;i++)poly([b[i],b[(i+1)%4],wl[(i+1)%4],wl[i]],C.aqua,.3);
-    poly(wl,C.aqua,.35);
-    ctx.strokeStyle=C.aqua;ctx.lineWidth=2.5;ctx.beginPath();for(i=0;i<4;i++)seg(wl[i],wl[(i+1)%4]);ctx.stroke();
+    for(i=0;i<4;i++)poly([b[i],b[(i+1)%4],wl[(i+1)%4],wl[i]],C.aqua,.14+.22*Math.max(0,bf(i)));
+    poly(wl,C.aqua,.5);
+    ctx.strokeStyle=C.aqua;ctx.lineWidth=3.5;ctx.beginPath();for(i=0;i<4;i++)seg(wl[i],wl[(i+1)%4]);ctx.stroke();
     if(show)poly(b,C.amber,.5);
     for(i=0;i<4;i++)poly([b[i],b[(i+1)%4],t[(i+1)%4],t[i]],C.mut,.04);
     poly(t,C.mut,.04);
@@ -534,7 +561,7 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   var hub=document.getElementById('hub'),p2=document.getElementById('p2'),main=document.querySelector('main');
   var cv=document.getElementById('cv2'),ctx=cv.getContext('2d');
   var msg=document.getElementById('m2'),ans=document.getElementById('a2'),ain=document.getElementById('i2'),an2=document.getElementById('n2'),afb=document.getElementById('f2'),ack=document.getElementById('k2');
-  var yaw=.35,pit=.22,dpr=1,S=20,cw=0,ch=0,C={},st=null,ns=[],raf=null,lastSt=null;
+  var yaw=.35,pit=.32,dpr=1,S=20,cw=0,ch=0,C={},st=null,ns=[],raf=null,lastSt=null;
   var R=2.2,HT=10,BASE=300,CAP=1000;
   var ST={A:{v:100,d:[1.7,1.5,1.6],s:1},B:{v:150,d:[2.1,1.8,2],s:2},C:{v:250,d:[2.6,2.2,2.5],s:3}};
   var OX=[0,.3,-.25],OZ=[0,.2,.25];
@@ -583,13 +610,35 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
     idx.forEach(function(i2){stone(i2);});
   }
   function ring(y,r){var a=[],k,n=32;for(k=0;k<n;k++){var q=6.2832*k/n;a.push([r*Math.cos(q),y,r*Math.sin(q)]);}return a;}
+  function fcam(){return [Math.sin(yaw),-Math.cos(yaw)];}
+  function wcyl(cx,cz,r,y0,y1){
+    if(y1<=y0)return;
+    var n=40,k,f=fcam(),top=[];
+    for(k=0;k<n;k++){
+      var a0=6.2832*k/n,a1=6.2832*(k+1)/n,am=(a0+a1)/2,fa=Math.cos(am)*f[0]+Math.sin(am)*f[1];
+      poly([[cx+r*Math.cos(a0),y0,cz+r*Math.sin(a0)],[cx+r*Math.cos(a1),y0,cz+r*Math.sin(a1)],[cx+r*Math.cos(a1),y1,cz+r*Math.sin(a1)],[cx+r*Math.cos(a0),y1,cz+r*Math.sin(a0)]],C.aqua,fa>0?.3+.2*fa:.13);
+      top.push([cx+r*Math.cos(a0),y1,cz+r*Math.sin(a0)]);
+    }
+    poly(top,C.aqua,.5);
+    ctx.strokeStyle=C.aqua;ctx.lineWidth=3.5;ctx.beginPath();
+    top.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});
+    ctx.closePath();ctx.stroke();
+  }
+  function gbody(cx,cz,r,y0,y1){
+    var n=40,k,f=fcam(),bot=[];
+    for(k=0;k<n;k++){
+      var a0=6.2832*k/n,a1=6.2832*(k+1)/n,am=(a0+a1)/2,fa=Math.cos(am)*f[0]+Math.sin(am)*f[1];
+      bot.push([cx+r*Math.cos(a0),y0,cz+r*Math.sin(a0)]);
+      if(fa>0)poly([[cx+r*Math.cos(a0),y0,cz+r*Math.sin(a0)],[cx+r*Math.cos(a1),y0,cz+r*Math.sin(a1)],[cx+r*Math.cos(a1),y1,cz+r*Math.sin(a1)],[cx+r*Math.cos(a0),y1,cz+r*Math.sin(a0)]],C.mut,.05);
+    }
+    poly(bot,C.mut,.08);
+  }
   function water(){
-    var v=vol(),ly=Math.min(v,CAP)/100,r0=ring(0,R),rl=ring(ly,R),n=r0.length,k;
-    for(k=0;k<n;k++)poly([r0[k],r0[(k+1)%n],rl[(k+1)%n],rl[k]],C.aqua,.22);
-    poly(rl,C.aqua,.4);
+    wcyl(0,0,R,0,Math.min(vol(),CAP)/100);
   }
   function glass(){
     var c=Math.cos(yaw),s=Math.sin(yaw),k;
+    gbody(0,0,R,0,HT);
     ctx.strokeStyle=C.mut;ctx.lineWidth=2;
     [ring(0,R),ring(HT,R)].forEach(function(rg){ctx.beginPath();rg.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.stroke();});
     ctx.beginPath();seg([R*c,0,R*s],[R*c,HT,R*s]);seg([-R*c,0,-R*s],[-R*c,HT,-R*s]);ctx.stroke();
@@ -638,7 +687,7 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   function note(done){
     if(!st)return;
     var t=BASE+ns.length*ST[st].v;
-    msg.textContent='量杯入面有 '+ns.length+' 粒石頭'+st+'。'+(done&&t>CAP?'量杯容量得 1000 mL（1 L），水已經溢出，量度唔到石頭嘅體積。':'');
+    msg.textContent='量杯內有 '+ns.length+' 顆石頭'+st+'。'+(done&&t>CAP?'量杯的容量只有 1000 mL（1 L），水已經溢出，無法量度石頭的體積。':'');
   }
   function tick(){
     draw();
@@ -649,8 +698,9 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   function kick(){if(!raf)raf=requestAnimationFrame(tick);}
   function clr(m){st=null;ns=[];mark();msg.textContent=m;draw();}
   function put(k){
-    if(st&&st!==k){msg.textContent='量杯入面已經有石頭'+st+'，要先撳「取出」先可以換石頭。';return;}
-    if(ns.length>=3){msg.textContent='最多只可以放 3 粒石頭。';return;}
+    if(locked){msg.textContent='請先回答「量杯內原有水」。';return;}
+    if(st&&st!==k){msg.textContent='量杯內已經有石頭'+st+'，請先按「取出」才可以更換石頭。';return;}
+    if(ns.length>=3){msg.textContent='最多只可以放 3 顆石頭。';return;}
     st=k;ns.push(performance.now());mark();note(false);kick();
   }
   function say(t,k){afb.textContent=t;afb.className=k;}
@@ -659,24 +709,27 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
     if(!st)return;
     var run=false,i;
     for(i=0;i<ns.length;i++)if(pr(i)<1)run=true;
-    if(run){say('等水位升完先再檢查。','');return;}
+    if(run){say('請等水位上升完畢後再檢查。','');return;}
     var n=ns.length,v=ST[st].v,tot=BASE+n*v,txt=ain.value.trim(),x=parseFloat(txt);
-    if(tot>CAP){say('量杯已經溢出，量度唔到。請撳「取出」，用少啲石頭再量度。','no');return;}
+    if(tot>CAP){say('量杯已經溢出，無法量度。請按「取出」，減少石頭的數量再量度。','no');return;}
     if(txt===''||isNaN(x)){say('請先輸入數字。','no');return;}
-    if(Math.abs(x-v)<1e-6){say('答啱喇！石頭'+st+'嘅體積係 '+v+' cm³。','ok');return;}
-    if(Math.abs(x-tot)<1e-6){say('你輸入嘅係放石頭後嘅水位讀數。石頭嘅體積要用放石頭後嘅讀數減去放石頭前嘅讀數（多粒就再除以粒數）。','no');return;}
-    if(n>1&&Math.abs(x-n*v)<1e-6){say('你輸入嘅係 '+n+' 粒石頭嘅總體積。一粒石頭嘅體積係幾多？','no');return;}
-    say('未啱，再睇下放石頭前後嘅水位，每小格係 100 mL。','no');
+    if(Math.abs(x-v)<1e-6){say('答對了！石頭'+st+'的體積是 '+v+' cm³。','ok');return;}
+    if(Math.abs(x-tot)<1e-6){say('你輸入的是放入石頭後的水位讀數。石頭的體積要用放入石頭後的讀數減去放入石頭前的讀數（如果有多顆石頭，還要除以石頭的數量）。','no');return;}
+    if(n>1&&Math.abs(x-n*v)<1e-6){say('你輸入的是 '+n+' 顆石頭的總體積。一顆石頭的體積是多少？','no');return;}
+    say('不正確，再看看放入石頭前後的水位，每小格是 100 mL。','no');
   };
   var oi=document.getElementById('i2o'),fo=document.getElementById('f2o'),ko=document.getElementById('k2o');
+  var locked=true;
+  function setLock(){document.querySelectorAll('#p2 .stbtn').forEach(function(b){b.disabled=locked;});}
+  setLock();msg.textContent='請先回答「量杯內原有水」，才可以放入石頭。';
   function say2(t,k){fo.textContent=t;fo.className=k;}
   oi.oninput=function(){oi.value=oi.value.replace(/[^0-9.]/g,'');fo.textContent='';};
   ko.onclick=function(){
     var txt=oi.value.trim(),x=parseFloat(txt);
     if(txt===''||isNaN(x)){say2('請先輸入數字。','no');return;}
-    if(Math.abs(x-BASE)<1e-6){say2('答啱喇！量杯入面原有 '+BASE+' mL 水。','ok');return;}
-    if(Math.abs(x-BASE/100)<1e-6){say2('你數到 '+x+' 小格，每小格係 100 mL，即係幾多 mL？','no');return;}
-    say2('未啱，再睇下水面喺邊條刻度，每小格係 100 mL。','no');
+    if(Math.abs(x-BASE)<1e-6){say2('答對了！量杯內原有 '+BASE+' mL 的水。','ok');if(locked){locked=false;setLock();msg.textContent='現在可以放入石頭了。';}return;}
+    if(Math.abs(x-BASE/100)<1e-6){say2('你數到 '+x+' 小格，每小格是 100 mL，即是多少 mL？','no');return;}
+    say2('不正確，再看看水面在哪條刻度，每小格是 100 mL。','no');
   };
   document.querySelectorAll('#p2 .stbtn').forEach(function(b){b.onclick=function(){if(b.id==='out2')clr('');else put(b.dataset.s);};});
   var dr=null;
@@ -756,13 +809,36 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
     idx.forEach(function(i2){stone(i2);});
   }
   function ring(y,r){var a=[],k,n=36;for(k=0;k<n;k++){var q=6.2832*k/n;a.push([r*Math.cos(q),y,r*Math.sin(q)]);}return a;}
+  function fcam(){return [Math.sin(yaw),-Math.cos(yaw)];}
+  function wcyl(cx,cz,r,y0,y1){
+    if(y1<=y0)return;
+    var n=40,k,f=fcam(),top=[];
+    for(k=0;k<n;k++){
+      var a0=6.2832*k/n,a1=6.2832*(k+1)/n,am=(a0+a1)/2,fa=Math.cos(am)*f[0]+Math.sin(am)*f[1];
+      poly([[cx+r*Math.cos(a0),y0,cz+r*Math.sin(a0)],[cx+r*Math.cos(a1),y0,cz+r*Math.sin(a1)],[cx+r*Math.cos(a1),y1,cz+r*Math.sin(a1)],[cx+r*Math.cos(a0),y1,cz+r*Math.sin(a0)]],C.aqua,fa>0?.3+.2*fa:.13);
+      top.push([cx+r*Math.cos(a0),y1,cz+r*Math.sin(a0)]);
+    }
+    poly(top,C.aqua,.5);
+    ctx.strokeStyle=C.aqua;ctx.lineWidth=3.5;ctx.beginPath();
+    top.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});
+    ctx.closePath();ctx.stroke();
+  }
+  function gbody(cx,cz,r,y0,y1){
+    var n=40,k,f=fcam(),bot=[];
+    for(k=0;k<n;k++){
+      var a0=6.2832*k/n,a1=6.2832*(k+1)/n,am=(a0+a1)/2,fa=Math.cos(am)*f[0]+Math.sin(am)*f[1];
+      bot.push([cx+r*Math.cos(a0),y0,cz+r*Math.sin(a0)]);
+      if(fa>0)poly([[cx+r*Math.cos(a0),y0,cz+r*Math.sin(a0)],[cx+r*Math.cos(a1),y0,cz+r*Math.sin(a1)],[cx+r*Math.cos(a1),y1,cz+r*Math.sin(a1)],[cx+r*Math.cos(a0),y1,cz+r*Math.sin(a0)]],C.mut,.05);
+    }
+    poly(bot,C.mut,.08);
+  }
+  function bf(i){var n=[[0,-1],[1,0],[0,1],[-1,0]][i];return n[0]*Math.sin(yaw)-n[1]*Math.cos(yaw);}
   function canWater(){
-    var ly=WL+bump(),r0=ring(0,RC),rl=ring(ly,RC),n=r0.length,k;
-    for(k=0;k<n;k++)poly([r0[k],r0[(k+1)%n],rl[(k+1)%n],rl[k]],C.aqua,.22);
-    poly(rl,C.aqua,.4);
+    wcyl(0,0,RC,0,WL+bump());
   }
   function canGlass(){
     var c=Math.cos(yaw),s=Math.sin(yaw);
+    gbody(0,0,RC,0,CHT);
     ctx.strokeStyle=C.mut;ctx.lineWidth=2;
     [ring(0,RC),ring(CHT,RC)].forEach(function(rg){ctx.beginPath();rg.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.stroke();});
     ctx.beginPath();seg([RC*c,0,RC*s],[RC*c,CHT,RC*s]);seg([-RC*c,0,-RC*s],[-RC*c,CHT,-RC*s]);ctx.stroke();
@@ -771,9 +847,9 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   function tankWater(hh){
     if(hh<=0)return;
     var w=TB.map(function(a){return [a[0],hh,a[2]];}),i;
-    for(i=0;i<4;i++)poly([TB[i],TB[(i+1)%4],w[(i+1)%4],w[i]],C.aqua,.3);
-    poly(w,C.aqua,.35);
-    ctx.strokeStyle=C.aqua;ctx.lineWidth=2.5;ctx.beginPath();for(i=0;i<4;i++)seg(w[i],w[(i+1)%4]);ctx.stroke();
+    for(i=0;i<4;i++)poly([TB[i],TB[(i+1)%4],w[(i+1)%4],w[i]],C.aqua,.14+.22*Math.max(0,bf(i)));
+    poly(w,C.aqua,.5);
+    ctx.strokeStyle=C.aqua;ctx.lineWidth=3.5;ctx.beginPath();for(i=0;i<4;i++)seg(w[i],w[(i+1)%4]);ctx.stroke();
   }
   function tankGlass(){
     var t=TB.map(function(a){return [a[0],TH,a[2]];}),i;
@@ -849,7 +925,7 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   function note(done){
     if(!st)return;
     var t=ns.length*ST[st].v;
-    msg.textContent='溢水杯入面有 '+ns.length+' 粒石頭'+st+'。'+(done&&t>CAP?'長方體水缸已經滿晒，水溢出咗，量度唔到石頭嘅體積。':'');
+    msg.textContent='溢水杯內有 '+ns.length+' 顆石頭'+st+'。'+(done&&t>CAP?'長方體水缸已經滿了，水溢出了，無法量度石頭的體積。':'');
   }
   function tick(){
     draw();
@@ -860,8 +936,8 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   function kick(){if(!raf)raf=requestAnimationFrame(tick);}
   function clr(m){st=null;ns=[];mark();msg.textContent=m;draw();}
   function put(k){
-    if(st&&st!==k){msg.textContent='溢水杯入面已經有石頭'+st+'，要先撳「取出」先可以換石頭。';return;}
-    if(ns.length>=3){msg.textContent='最多只可以放 3 粒石頭。';return;}
+    if(st&&st!==k){msg.textContent='溢水杯內已經有石頭'+st+'，請先按「取出」才可以更換石頭。';return;}
+    if(ns.length>=3){msg.textContent='最多只可以放 3 顆石頭。';return;}
     st=k;ns.push(performance.now());mark();note(false);kick();
   }
   function say(t,k){afb.textContent=t;afb.className=k;}
@@ -870,14 +946,14 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
     if(!st)return;
     var run=false,i;
     for(i=0;i<ns.length;i++)if(pr(i)<1)run=true;
-    if(run){say('等水流完先再檢查。','');return;}
+    if(run){say('請等水流完畢後再檢查。','');return;}
     var n=ns.length,v=ST[st].v,tot=n*v,txt=ain.value.trim(),x=parseFloat(txt);
-    if(tot>CAP){say('水缸已經滿晒，量度唔到。請撳「取出」，用少啲石頭再量度。','no');return;}
+    if(tot>CAP){say('水缸已經滿了，無法量度。請按「取出」，減少石頭的數量再量度。','no');return;}
     if(txt===''||isNaN(x)){say('請先輸入數字。','no');return;}
-    if(Math.abs(x-v)<1e-6){say('答啱喇！石頭'+st+'嘅體積係 '+v+' cm³。','ok');return;}
-    if(Math.abs(x-tot/BA)<.051){say('你輸入嘅係水位的高。排出嘅水嘅體積 = 長 × 闊 × 水位的高。','no');return;}
-    if(n>1&&Math.abs(x-tot)<1e-6){say('你輸入嘅係 '+n+' 粒石頭嘅總體積。一粒石頭嘅體積係幾多？','no');return;}
-    say('未啱，再試下：排出嘅水嘅體積 = 長 × 闊 × 水位的高。如果放咗多過一粒石頭，仲要除以粒數。','no');
+    if(Math.abs(x-v)<1e-6){say('答對了！石頭'+st+'的體積是 '+v+' cm³。','ok');return;}
+    if(Math.abs(x-tot/BA)<.051){say('你輸入的是水位的高。排出的水的體積 = 長 × 闊 × 水位的高。','no');return;}
+    if(n>1&&Math.abs(x-tot)<1e-6){say('你輸入的是 '+n+' 顆石頭的總體積。一顆石頭的體積是多少？','no');return;}
+    say('不正確，再試一次：排出的水的體積 = 長 × 闊 × 水位的高。如果放入了多顆石頭，還要除以石頭的數量。','no');
   };
   document.querySelectorAll('#p3 .stbtn').forEach(function(b){b.onclick=function(){if(b.id==='out3')clr('');else put(b.dataset.s);};});
   var dr=null;
@@ -931,6 +1007,7 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
     ctx.fill();ctx.stroke();
     ctx.fillStyle=C.ink;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t,p[0],p[1]+1);
   }
+  function bf(i){var n=[[0,-1],[1,0],[0,1],[-1,0]][i];return n[0]*Math.sin(yaw)-n[1]*Math.cos(yaw);}
   function lvl(){return H0+VS/(L*W)*cl((s-.3)/.7);}
   function stY(){var e=cl(s/.45);return (1-e*e)*13;}
   function stone(){
@@ -959,11 +1036,11 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
     var late=stY()>=hw;
     if(!late)stone();
     var w=b.map(function(q){return [q[0],hw,q[2]];}),w0=b.map(function(q){return [q[0],H0,q[2]];});
-    for(i=0;i<4;i++)poly([b[i],b[(i+1)%4],w[(i+1)%4],w[i]],C.aqua,.3);
+    for(i=0;i<4;i++)poly([b[i],b[(i+1)%4],w[(i+1)%4],w[i]],C.aqua,.14+.22*Math.max(0,bf(i)));
     for(i=0;i<4;i++)poly([w0[i],w0[(i+1)%4],w[(i+1)%4],w[i]],C.ok,.55);
     var rs=hw>H0+.02;
-    poly(w,rs?C.ok:C.aqua,rs?.45:.35);
-    ctx.strokeStyle=rs?C.ok:C.aqua;ctx.lineWidth=2.5;ctx.beginPath();for(i=0;i<4;i++)seg(w[i],w[(i+1)%4]);ctx.stroke();
+    poly(w,rs?C.ok:C.aqua,rs?.55:.5);
+    ctx.strokeStyle=rs?C.ok:C.aqua;ctx.lineWidth=3.5;ctx.beginPath();for(i=0;i<4;i++)seg(w[i],w[(i+1)%4]);ctx.stroke();
     for(i=0;i<4;i++)poly([b[i],b[(i+1)%4],t[(i+1)%4],t[i]],C.mut,.04);
     poly(t,C.mut,.04);
     ctx.strokeStyle=C.mut;ctx.lineWidth=2;ctx.beginPath();
@@ -1008,11 +1085,11 @@ input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
   ack.onclick=function(){
     var txt=ain.value.trim(),x=parseFloat(txt),bs=L*W,rise=VS/bs;
     if(txt===''||isNaN(x)){say('請先輸入數字。','no');return;}
-    if(Math.abs(x-rise)<=0.0051){say('答啱喇！水位上升咗 '+(Math.round(rise*100)/100)+' cm。試下轉個長闊再做一次。','ok');return;}
-    if(Math.abs(x-bs)<1e-6){say('你輸入嘅係底面積。水位上升嘅高度 = 石頭體積 ÷ 底面積。','no');return;}
-    if(Math.abs(x-VS)<1e-6){say('20 cm³ 係石頭嘅體積，唔係水位上升嘅高度。','no');return;}
-    if(Math.abs(x-(H0+rise))<=0.0051){say('你輸入嘅係放石頭後嘅水位。題目問嘅係水位上升咗幾多，要減去原本嘅水位。','no');return;}
-    say('未啱，再諗諗：高 = 體積 ÷ 底面積。如果除唔盡，請四捨五入至小數後兩位。','no');
+    if(Math.abs(x-rise)<=0.0051){say('答對了！水位上升了 '+(Math.round(rise*100)/100)+' cm。試試改變長和闊再做一次。','ok');return;}
+    if(Math.abs(x-bs)<1e-6){say('你輸入的是底面積。水位上升的高度 = 石頭體積 ÷ 底面積。','no');return;}
+    if(Math.abs(x-VS)<1e-6){say('20 cm³ 是石頭的體積，不是水位上升的高度。','no');return;}
+    if(Math.abs(x-(H0+rise))<=0.0051){say('你輸入的是放入石頭後的水位。題目問的是水位上升了多少，要減去原本的水位。','no');return;}
+    say('不正確，再想想：高 = 體積 ÷ 底面積。如果除不盡，請四捨五入至小數後兩位。','no');
   };
   rl.oninput=upd;rw.oninput=upd;
   ar.onclick=function(){show=!show;ar.setAttribute('aria-pressed',show?'true':'false');upd();};
