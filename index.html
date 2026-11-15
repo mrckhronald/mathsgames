@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的數學遊戲庫</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c3e50; }
+        .categories { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
+        .cat-btn { padding: 8px 16px; border: none; background: #e2e8f0; cursor: pointer; border-radius: 20px; font-size: 14px; font-weight: bold; transition: 0.2s; }
+        .cat-btn.active, .cat-btn:hover { background: #3182ce; color: white; }
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        .game-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
+        .game-card h3 { margin-top: 0; color: #2d3748; }
+        .tag { display: inline-block; background: #edf2f7; color: #4a5568; padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-bottom: 10px; width: fit-content; }
+        .play-btn { text-decoration: none; background: #3182ce; color: white; text-align: center; padding: 10px; border-radius: 6px; font-weight: bold; margin-top: 15px; display: block; }
+        .play-btn:hover { background: #2b6cb0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📐 我的數學遊戲庫</h1>
+        
+        <!-- 分類按鈕列 -->
+        <div class="categories" id="categoryFilters">
+            <button class="cat-btn active" onclick="filterGames('all')">全部顯示</button>
+            <button class="cat-btn" onclick="filterGames('小學數學')">小學數學</button>
+            <button class="cat-btn" onclick="filterGames('奧數挑戰')">奧數挑戰</button>
+        </div>
+
+        <!-- 遊戲卡片列表 -->
+        <div class="game-grid" id="gameGrid">
+            <!-- 遊戲 1：排水法 -->
+            <div class="game-card" data-category="小學數學">
+                <div>
+                    <span class="tag">小學數學</span>
+                    <h3>排水法・公式解鎖</h3>
+                    <p style="font-size: 14px; color: #666;">透過互動方式學習立體體積與排水法概念。</p>
+                </div>
+                <a href="排水法・公式解鎖.html" class="play-btn" target="_blank">開始遊戲 🚀</a>
+            </div>
+            
+            <!-- 之後你只要照呢個格式複製多個 <div class="game-card"> 就可以加新遊戲 -->
+        </div>
+    </div>
+
+    <script>
+        function filterGames(category) {
+            const buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const cards = document.querySelectorAll('.game-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
