@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小學數學遊戲資源庫</title>
+    <title>數學電子教育資源庫</title>
     <style>
         :root {
             --primary-color: #1a365d;
@@ -38,6 +38,9 @@
         .game-card { background: var(--card-bg); border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e2e8f0; transition: transform 0.2s, box-shadow 0.2s; }
         .game-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
         
+        /* 遊戲卡片頂部預覽封面樣式 */
+        .card-cover { height: 130px; background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%); display: flex; align-items: center; justify-content: center; font-size: 50px; border-bottom: 1px solid #edf2f7; }
+
         .card-header { background: #edf2f7; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: bold; }
         .badge-grade { background: #3182ce; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
         .badge-cat { color: var(--text-muted); font-size: 12px; }
@@ -92,6 +95,7 @@
             <!-- 遊戲 1：排水法 -->
             <div class="game-card" data-grade="小五小六" data-category="度量">
                 <div>
+                    <div class="card-cover">💧</div>
                     <div class="card-header">
                         <span class="badge-grade">小五 / 小六</span>
                         <span class="badge-cat">度量範疇</span>
@@ -109,6 +113,7 @@
             <!-- 遊戲 2：認識時鐘 -->
             <div class="game-card" data-grade="小一" data-category="度量">
                 <div>
+                    <div class="card-cover">⏰</div>
                     <div class="card-header">
                         <span class="badge-grade">小一</span>
                         <span class="badge-cat">度量範疇</span>
@@ -126,6 +131,7 @@
             <!-- 遊戲 3：基本加法 -->
             <div class="game-card" data-grade="小一" data-category="數">
                 <div>
+                    <div class="card-cover">➕</div>
                     <div class="card-header">
                         <span class="badge-grade">小一</span>
                         <span class="badge-cat">數範疇</span>
@@ -143,6 +149,7 @@
             <!-- 遊戲 4：籃球乘法大賽 -->
             <div class="game-card" data-grade="小二" data-category="數">
                 <div>
+                    <div class="card-cover">🏀</div>
                     <div class="card-header">
                         <span class="badge-grade">小二</span>
                         <span class="badge-cat">數範疇</span>
@@ -160,6 +167,7 @@
             <!-- 遊戲 5：天平方程遺跡大冒險 -->
             <div class="game-card" data-grade="小五小六" data-category="代數">
                 <div>
+                    <div class="card-cover">⚖️</div>
                     <div class="card-header">
                         <span class="badge-grade">小五 / 小六</span>
                         <span class="badge-cat">代數範疇</span>
@@ -177,6 +185,7 @@
             <!-- 遊戲 6：兩個分數乘法 -->
             <div class="game-card" data-grade="小五" data-category="數">
                 <div>
+                    <div class="card-cover">⚡</div>
                     <div class="card-header">
                         <span class="badge-grade">小五</span>
                         <span class="badge-cat">數範疇</span>
@@ -194,6 +203,7 @@
             <!-- 遊戲 7：三個分數乘法 -->
             <div class="game-card" data-grade="小五" data-category="數">
                 <div>
+                    <div class="card-cover">⭐</div>
                     <div class="card-header">
                         <span class="badge-grade">小五</span>
                         <span class="badge-cat">數範疇</span>
