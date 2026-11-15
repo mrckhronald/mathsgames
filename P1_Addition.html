@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太空數學任務：三數加法</title>
+    <style>
+        :root {
+            --space-blue: #0b1e3b;
+            --neon-blue: #00d2ff;
+            --neon-pink: #ff007f;
+            --star-white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        /* 星空背景動畫 */
+        .stars {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: transparent url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/123163/stars.png') repeat top center;
+            animation: move-stars 200s linear infinite;
+        }
+
+        @keyframes move-stars {
+            from { background-position: 0 0; }
+            to { background-position: 0 -10000px; }
+        }
+
+        h1 {
+            margin-top: 20px;
+            text-shadow: 0 0 10px var(--neon-blue);
+            letter-spacing: 5px;
+            font-size: 32px;
+        }
+
+        .mission-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--neon-blue);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+            margin-top: 20px;
+            width: 350px;
+            position: relative;
+        }
+
+        /* 太空人裝飾 */
+        .astronaut {
+            position: absolute;
+            width: 80px;
+            top: -60px;
+            right: -40px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(5deg); }
+            50% { transform: translateY(-20px) rotate(-5deg); }
+        }
+
+        /* 數學直式表格 - 模仿藍色網格 */
+        .math-grid {
+            border-collapse: collapse;
+            margin: 0 auto;
+            color: white;
+        }
+
+        .math-grid td {
+            width: 60px;
+            height: 60px;
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .label-row td {
+            border: none;
+            font-size: 18px;
+            color: var(--neon-blue);
+            padding-bottom: 5px;
+        }
+
+        .thick-bottom {
+            border-bottom: 4px solid white !important;
+        }
+
+        .operator {
+            border: none !important;
+            color: var(--neon-pink);
+            font-size: 36px;
+        }
+
+        /* 輸入框 */
+        .digit-input {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-blue);
+            border-radius: 5px;
+            color: #fff;
+            font-size: 32px;
+            text-align: center;
+            outline: none;
+        }
+
+        .digit-input:focus {
+            background: rgba(0, 210, 255, 0.2);
+            border-color: #fff;
+            box-shadow: 0 0 10px #fff;
+        }
+
+        /* 進位提示小框 */
+        .carry-box {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 22px;
+            height: 22px;
+            font-size: 14px;
+            color: #ffff00;
+            background: transparent;
+            border: 1px dashed #ffff00;
+            text-align: center;
+        }
+
+        /* 按鈕控制 */
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-check { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
+        .btn-next { background: var(--neon-blue); color: white; box-shadow: 0 0 15px var(--neon-blue); }
+        button:hover { transform: scale(1.1); filter: brightness(1.2); }
+
+        #feedback {
+            margin-top: 20px;
+            font-size: 24px;
+            min-height: 35px;
+            text-align: center;
+            text-shadow: 0 0 5px white;
+        }
+
+        .success { color: #00ff00; }
+        .error { color: #ff3333; }
+
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+
+    <h1>🚀 太空數學任務</h1>
+    <p>工程師，請算出火箭燃料的正確數值！</p>
+
+    <div class="mission-panel">
+        <img src="https://cdn-icons-png.flaticon.com/512/2026/2026528.png" class="astronaut" alt="Astronaut">
+        
+        <table class="math-grid">
+            <tr class="label-row">
+                <td></td>
+                <td>十位</td>
+                <td>個位</td>
+            </tr>
+            <!-- 數 1 -->
+            <tr>
+                <td class="operator"></td>
+                <td id="n1-10"></td>
+                <td id="n1-1"></td>
+            </tr>
+            <!-- 數 2 -->
+            <tr class="thick-bottom">
+                <td class="operator">+</td>
+                <td id="n2-10"></td>
+                <td id="n2-1"></td>
+            </tr>
+            <!-- 中間和 -->
+            <tr>
+                <td class="operator"></td>
+                <td><input type="number" id="sub-10" class="digit-input" oninput="moveFocus(this, 'sub-1')"></td>
+                <td><input type="number" id="sub-1" class="digit-input" oninput="moveFocus(this, 'total-10')"></td>
+            </tr>
+            <!-- 數 3 -->
+            <tr class="thick-bottom">
+                <td class="operator">+</td>
+                <td id="n3-10"></td>
+                <td id="n3-1"></td>
+            </tr>
+            <!-- 最後結果 -->
+            <tr>
+                <td class="operator"></td>
+                <td>
+                    <input type="number" id="total-10" class="digit-input" oninput="moveFocus(this, 'total-1')">
+                    <input type="number" id="carry" class="carry-box" placeholder="進位" title="小提示：進位寫這裡">
+                </td>
+                <td><input type="number" id="total-1" class="digit-input"></td>
+            </tr>
+        </table>
+
+        <div id="feedback"></div>
+
+        <div class="controls">
+            <button class="btn-check" onclick="checkAnswer()">檢查引擎</button>
+            <button class="btn-next" onclick="generateMission()">下個星系</button>
+        </div>
+    </div>
+
+    <script>
+        let n1, n2, n3, sub, final;
+
+        // 生成新任務
+        function generateMission() {
+            document.getElementById('feedback').innerText = "";
+            const inputs = document.querySelectorAll('.digit-input, .carry-box');
+            inputs.forEach(input => input.value = "");
+
+            let total = 100;
+            while (total > 99) {
+                n1 = Math.floor(Math.random() * 40) + 5;
+                n2 = Math.floor(Math.random() * 30) + 5;
+                n3 = Math.floor(Math.random() * 20) + 5;
+                sub = n1 + n2;
+                total = n1 + n2 + n3;
+            }
+            final = total;
+
+            // 填入顯示數字
+            document.getElementById('n1-10').innerText = Math.floor(n1/10) || "";
+            document.getElementById('n1-1').innerText = n1%10;
+            document.getElementById('n2-10').innerText = Math.floor(n2/10) || "";
+            document.getElementById('n2-1').innerText = n2%10;
+            document.getElementById('n3-10').innerText = Math.floor(n3/10) || "";
+            document.getElementById('n3-1').innerText = n3%10;
+
+            document.getElementById('sub-10').focus();
+        }
+
+        // 自動跳格功能
+        function moveFocus(current, nextId) {
+            if (current.value.length >= 1) {
+                current.value = current.value.slice(0, 1);
+                document.getElementById(nextId).focus();
+            }
+        }
+
+        // 檢查答案
+        function checkAnswer() {
+            const s10 = parseInt(document.getElementById('sub-10').value) || 0;
+            const s1 = parseInt(document.getElementById('sub-1').value) || 0;
+            const userSub = s10 * 10 + s1;
+
+            const t10 = parseInt(document.getElementById('total-10').value) || 0;
+            const t1 = parseInt(document.getElementById('total-1').value) || 0;
+            const userTotal = t10 * 10 + t1;
+
+            const fb = document.getElementById('feedback');
+
+            if (userSub === sub && userTotal === final) {
+                fb.innerHTML = "✨ 任務完成！火箭升空！ ✨";
+                fb.className = "success";
+                launchEffect();
+            } else {
+                fb.innerHTML = "❌ 引擎故障，請重新計算數值！";
+                fb.className = "error";
+            }
+        }
+
+        function launchEffect() {
+            const panel = document.querySelector('.mission-panel');
+            panel.style.transition = "transform 0.5s";
+            panel.style.transform = "translateY(-20px)";
+            setTimeout(() => {
+                panel.style.transform = "translateY(0)";
+            }, 500);
+        }
+
+        // 初始載入
+        generateMission();
+    </script>
+</body>
+</html>
