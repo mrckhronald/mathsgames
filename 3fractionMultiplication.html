@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>吉伊卡哇的分數點心時間 🍪</title>
+    <style>
+        :root {
+            --chiikawa-pink: #ffcad4;
+            --hachiware-blue: #a2d2ff;
+            --usagi-yellow: #fcf6bd;
+            --momonga-purple: #c8b6ff;
+            --text-color: #5a5a5a;
+            --success-color: #b9fbc0;
+            --error-color: #ffcfd2;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', "Microsoft JhengHei", sans-serif;
+            background-color: #fff9fb;
+            background-image: radial-gradient(#ffe5ec 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        .header-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #ff8fab;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 0px #fff;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            font-weight: bold;
+            color: #888;
+        }
+
+        .game-container {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 143, 171, 0.2);
+            max-width: 900px;
+            width: 100%;
+            border: 5px solid var(--chiikawa-pink);
+            position: relative;
+        }
+
+        /* 裝飾性小符號 */
+        .game-container::before {
+            content: "₍ᐢ- ̫ -ᐢ₎"; /* 吉伊卡哇臉 */
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            background: var(--chiikawa-pink);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .equation-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #fffafa;
+            border-radius: 20px;
+            border: 3px dashed var(--chiikawa-pink);
+            transition: all 0.3s;
+        }
+        
+        .equation-row.generating {
+            background-color: var(--usagi-yellow);
+            transform: scale(1.02);
+        }
+
+        .mixed-fraction {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .integer-input {
+            width: 55px;
+            height: 70px;
+            font-size: 28px;
+            text-align: center;
+            border: 3px solid var(--chiikawa-pink);
+            border-radius: 12px;
+            background-color: #fff;
+            color: #ff8fab;
+            font-weight: bold;
+        }
+
+        .fraction-part {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .num-input, .den-input {
+            width: 55px;
+            height: 45px;
+            font-size: 22px;
+            text-align: center;
+            border: 3px solid var(--chiikawa-pink);
+            border-radius: 10px;
+            color: #ff8fab;
+        }
+
+        .fraction-line {
+            width: 100%;
+            height: 4px;
+            background-color: #ffb3c1;
+            border-radius: 2px;
+        }
+
+        .symbol {
+            font-size: 35px;
+            font-weight: bold;
+            color: #ff8fab;
+            margin: 0 10px;
+        }
+
+        .answer-section {
+            background-color: #f0f7ff;
+            border-color: var(--hachiware-blue);
+        }
+        
+        .answer-inputs .integer-input, 
+        .answer-inputs .num-input, 
+        .answer-inputs .den-input {
+            border-color: var(--hachiware-blue);
+            color: #5baaff;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 28px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            box-shadow: 0 4px 0px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 0px rgba(0,0,0,0.1);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* 吉伊卡哇角色按鈕 */
+        .btn-random { background-color: var(--usagi-yellow); color: #7a6e00; } /* 烏薩奇：隨機 */
+        .btn-check { background-color: var(--hachiware-blue); color: white; } /* 小八：檢查 */
+        .btn-hint { background-color: var(--momonga-purple); color: white; } /* 小桃：提示 */
+        .btn-reset { background-color: #eee; color: #888; }
+
+        #message-area {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            display: none;
+            animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .msg-success { background-color: var(--success-color); color: #2d6a4f; border: 3px solid #95d5b2; }
+        .msg-error { background-color: var(--error-color); color: #a4161a; border: 3px solid #ffb3c1; }
+        .msg-warning { background-color: #fffbe6; color: #d48806; border: 3px solid #ffe58f; }
+
+        .label-tag {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        input:focus {
+            outline: none;
+            background-color: #fff9fb;
+            border-color: #ff4d6d !important;
+        }
+
+        /* 隱藏數字輸入器的箭頭 */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <h1>🍓 吉伊卡哇的分數點心時間</h1>
+        <div class="subtitle">
+            幫助吉伊卡哇計算出正確的麵粉配方吧！( ⸝⸝•ᴗ•⸝⸝ )
+        </div>
+    </div>
+
+    <div class="game-container">
+        
+        <!-- 題目輸入區 -->
+        <div class="label-tag">🥣 步驟 1：準備食材 (點擊烏薩奇來出題)</div>
+        <div class="equation-row" id="question-area">
+            <!-- 分數 1 -->
+            <div class="mixed-fraction">
+                <input type="number" id="i1" class="integer-input" placeholder="整" min="0">
+                <div class="fraction-part">
+                    <input type="number" id="n1" class="num-input" placeholder="子" min="0">
+                    <div class="fraction-line"></div>
+                    <input type="number" id="d1" class="den-input" placeholder="母" min="1">
+                </div>
+            </div>
+
+            <div class="symbol">×</div>
+
+            <!-- 分數 2 -->
+            <div class="mixed-fraction">
+                <input type="number" id="i2" class="integer-input" placeholder="整" min="0">
+                <div class="fraction-part">
+                    <input type="number" id="n2" class="num-input" placeholder="子" min="0">
+                    <div class="fraction-line"></div>
+                    <input type="number" id="d2" class="den-input" placeholder="母" min="1">
+                </div>
+            </div>
+
+            <div class="symbol">×</div>
+
+            <!-- 分數 3 -->
+            <div class="mixed-fraction">
+                <input type="number" id="i3" class="integer-input" placeholder="整" min="0">
+                <div class="fraction-part">
+                    <input type="number" id="n3" class="num-input" placeholder="子" min="0">
+                    <div class="fraction-line"></div>
+                    <input type="number" id="d3" class="den-input" placeholder="母" min="1">
+                </div>
+            </div>
+
+            <div class="symbol">=</div>
+        </div>
+
+        <!-- 答案輸入區 -->
+        <div class="label-tag">🥧 步驟 2：烤好點心了！ (填入最簡帶分數)</div>
+        <div class="equation-row answer-section">
+            <div class="mixed-fraction answer-inputs">
+                <input type="number" id="ans_i" class="integer-input" placeholder="整" min="0">
+                <div class="fraction-part">
+                    <input type="number" id="ans_n" class="num-input" placeholder="子" min="0">
+                    <div class="fraction-line"></div>
+                    <input type="number" id="ans_d" class="den-input" placeholder="母" min="1">
+                </div>
+            </div>
+        </div>
+
+        <!-- 控制按鈕 -->
+        <div class="controls">
+            <button class="btn-random" onclick="generateRandom()">🐰 烏薩奇驚喜 (出題)</button>
+            <button class="btn-check" onclick="checkAnswer()">🐱 小八來檢查 (驗證)</button>
+            <button class="btn-hint" onclick="showAnswer()">😈 小桃的祕密 (答案)</button>
+            <button class="btn-reset" onclick="resetGame()">🧹 打掃環境</button>
+        </div>
+
+        <!-- 訊息回饋區 -->
+        <div id="message-area"></div>
+    </div>
+
+    <script>
+        function getVal(id, isDenom = false) {
+            const val = document.getElementById(id).value;
+            if (val === '') return isDenom ? 1 : 0;
+            return parseInt(val, 10);
+        }
+
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateRandom() {
+            resetGame();
+            const questionArea = document.getElementById('question-area');
+            questionArea.classList.add('generating');
+            setTimeout(() => questionArea.classList.remove('generating'), 500);
+
+            for (let k = 1; k <= 3; k++) {
+                let d = getRandomInt(2, 6);
+                let n = getRandomInt(1, d - 1);
+                let i = getRandomInt(1, 2); // 為了不讓學生算到哭，數字調小一點
+
+                document.getElementById(`i${k}`).value = i;
+                document.getElementById(`n${k}`).value = n;
+                document.getElementById(`d${k}`).value = d;
+            }
+        }
+
+        function checkAnswer() {
+            const msgArea = document.getElementById('message-area');
+            msgArea.style.display = 'block';
+            msgArea.className = '';
+
+            const inputs = [
+                { i: getVal('i1'), n: getVal('n1'), d: getVal('d1', true) },
+                { i: getVal('i2'), n: getVal('n2'), d: getVal('d2', true) },
+                { i: getVal('i3'), n: getVal('n3'), d: getVal('d3', true) }
+            ];
+
+            for(let k=0; k<3; k++) {
+                if (document.getElementById(`d${k+1}`).value === "") {
+                     msgArea.textContent = "嗚... 小八說題目還沒填好喔！";
+                     msgArea.className = "msg-warning";
+                     return;
+                }
+            }
+
+            let top1 = inputs[0].i * inputs[0].d + inputs[0].n;
+            let top2 = inputs[1].i * inputs[1].d + inputs[1].n;
+            let top3 = inputs[2].i * inputs[2].d + inputs[2].n;
+
+            let totalTop = top1 * top2 * top3;
+            let totalBot = inputs[0].d * inputs[1].d * inputs[2].d;
+
+            let common = gcd(totalTop, totalBot);
+            let simplifiedTop = totalTop / common;
+            let simplifiedBot = totalBot / common;
+
+            let correctInt = Math.floor(simplifiedTop / simplifiedBot);
+            let correctNum = simplifiedTop % simplifiedBot;
+            let correctDen = simplifiedBot;
+
+            let userInt = getVal('ans_i');
+            let userNum = getVal('ans_n');
+            let userDen = getVal('ans_d', true);
+
+            if (document.getElementById('ans_n').value === "" && document.getElementById('ans_d').value === "") {
+                userNum = 0; userDen = 1; 
+            }
+
+            let userTotalTop = userInt * userDen + userNum;
+            let isValueCorrect = (userTotalTop * simplifiedBot) === (simplifiedTop * userDen);
+
+            if (!isValueCorrect) {
+                msgArea.innerHTML = "哭惹 ( ; ω ; ) 算錯了... <br>要不要先換成假分數再試一次？";
+                msgArea.className = "msg-error";
+            } else {
+                let isSimplified = false;
+                if (correctNum === 0) {
+                    if (userNum === 0) isSimplified = true;
+                } else {
+                    if (userNum === correctNum && userDen === correctDen && userInt === correctInt) {
+                        isSimplified = true;
+                    }
+                }
+
+                if (isSimplified) {
+                    msgArea.innerHTML = "呀哈！( >◡< ) <br>太棒了！點心做得非常完美！";
+                    msgArea.className = "msg-success";
+                } else {
+                    if (userNum >= userDen) {
+                        msgArea.textContent = "數值是對的，但要把假分數換成帶分數喔！";
+                        msgArea.className = "msg-warning";
+                    } else {
+                        msgArea.textContent = "已經很接近了！但還需要「約分」成最簡分數喔！";
+                        msgArea.className = "msg-warning";
+                    }
+                }
+            }
+        }
+
+        function showAnswer() {
+            const msgArea = document.getElementById('message-area');
+            if (document.getElementById('d1').value === "") {
+                msgArea.textContent = "先點一下烏薩奇出題嘛～";
+                msgArea.className = "msg-warning";
+                msgArea.style.display = 'block';
+                return;
+            }
+
+            const inputs = [
+                { i: getVal('i1'), n: getVal('n1'), d: getVal('d1', true) },
+                { i: getVal('i2'), n: getVal('n2'), d: getVal('d2', true) },
+                { i: getVal('i3'), n: getVal('n3'), d: getVal('d3', true) }
+            ];
+
+            let top1 = inputs[0].i * inputs[0].d + inputs[0].n;
+            let top2 = inputs[1].i * inputs[1].d + inputs[1].n;
+            let top3 = inputs[2].i * inputs[2].d + inputs[2].n;
+            let totalTop = top1 * top2 * top3;
+            let totalBot = inputs[0].d * inputs[1].d * inputs[2].d;
+            let common = gcd(totalTop, totalBot);
+            let simplifiedTop = totalTop / common;
+            let simplifiedBot = totalBot / common;
+
+            let correctInt = Math.floor(simplifiedTop / simplifiedBot);
+            let correctNum = simplifiedTop % simplifiedBot;
+            let correctDen = simplifiedBot;
+
+            let ansStr = (correctNum === 0) ? `${correctInt}` : 
+                         (correctInt === 0) ? `${correctNum}/${correctDen}` : 
+                         `${correctInt} 又 ${correctNum}/${correctDen}`;
+
+            msgArea.style.display = 'block';
+            msgArea.className = "msg-warning";
+            msgArea.innerHTML = `哼哼，告訴你吧： <b>${ansStr}</b> <br>下次要自己算喔！`;
+        }
+
+        function resetGame() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => input.value = '');
+            const msgArea = document.getElementById('message-area');
+            msgArea.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
