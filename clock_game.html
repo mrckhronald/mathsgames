@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時光森林：學會時正與時半</title>
+    <style>
+        :root {
+            --primary-color: #ff9800;
+            --hour-color: #ff5252;
+            --min-color: #2196f3;
+            --bg-color: #1a237e;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            background: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 20%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* 裝飾用的齒輪圖案 */
+        .decoration {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.2;
+            animation: rotate 20s linear infinite;
+        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        h1 {
+            font-size: 2.2rem;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            letter-spacing: 3px;
+        }
+
+        /* 時鐘本體：金色機械風格 */
+        .clock-container {
+            position: relative;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .clock {
+            width: 320px;
+            height: 320px;
+            border: 12px solid #ffd700;
+            border-radius: 50%;
+            position: relative;
+            background: #fff;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        .number {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 40px;
+            color: #333;
+            left: 50%;
+            top: 50%;
+            margin-left: -20px;
+            margin-top: -20px;
+        }
+
+        /* 指針設計 */
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 10px;
+        }
+
+        .hour-hand {
+            width: 12px;
+            height: 80px;
+            background: var(--hour-color);
+            margin-left: -6px;
+            z-index: 5;
+            border: 2px solid #800;
+        }
+
+        .minute-hand {
+            width: 8px;
+            height: 135px;
+            background: var(--min-color);
+            margin-left: -4px;
+            z-index: 4;
+            border: 2px solid #004;
+        }
+
+        .center-dot {
+            width: 20px;
+            height: 20px;
+            background: #444;
+            border: 3px solid #ffd700;
+            border-radius: 50%;
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        /* 控制區域 */
+        .controls {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 20px;
+            border-radius: 30px;
+            width: 360px;
+            margin-top: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .result-box {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            border-bottom: 3px dashed #ddd;
+        }
+
+        .msg-correct { color: #2e7d32; animation: bounce 0.5s; }
+        .msg-hint { color: #d32f2f; font-size: 1.4rem; }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .slider-group { margin: 15px 0; }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 15px;
+            border-radius: 10px;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        label { font-weight: bold; font-size: 1.1rem; display: block; margin-bottom: 5px; }
+
+        .btn-hide {
+            background: #5c6bc0; color: white; border: none;
+            padding: 8px 20px; border-radius: 20px; cursor: pointer;
+            font-weight: bold; margin-bottom: 10px;
+        }
+
+        /* 裝飾元素：沙漏與齒輪 */
+        .icon-time { font-size: 50px; position: absolute; }
+    </style>
+</head>
+<body>
+
+    <!-- 裝飾背景 -->
+    <div class="decoration" style="top:10%; left:10%; font-size:100px;">⚙️</div>
+    <div class="decoration" style="bottom:15%; right:10%; font-size:80px;">⚙️</div>
+    <div class="decoration" style="top:50%; right:5%; font-size:40px; animation-duration: 5s;">⌛</div>
+    <div class="decoration" style="top:20%; right:20%; font-size:30px;">🌟</div>
+
+    <h1>✨ 時光機械森林</h1>
+
+    <div class="clock-container">
+        <div class="clock">
+            <div id="face"></div>
+            <div class="center-dot"></div>
+            <div class="hand hour-hand" id="hourHand"></div>
+            <div class="hand minute-hand" id="minuteHand"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="result-box" id="resultDisplay">
+            12 時正
+        </div>
+
+        <button class="btn-hide" onclick="toggleAnswer()">🔍 隱藏答案挑戰</button>
+
+        <div class="slider-group">
+            <label style="color:var(--hour-color)">🔴 轉動短針 (時)</label>
+            <input type="range" id="hourInput" min="1" max="12.5" step="0.5" value="12" oninput="updateClock()">
+        </div>
+
+        <div class="slider-group">
+            <label style="color:var(--min-color)">🔵 轉動長針 (分)</label>
+            <!-- 嚴格限制只有 0 和 30 -->
+            <input type="range" id="minuteInput" min="0" max="30" step="30" value="0" oninput="updateClock()">
+        </div>
+    </div>
+
+    <script>
+        const face = document.getElementById('face');
+        for (let i = 1; i <= 12; i++) {
+            const num = document.createElement('div');
+            num.className = 'number';
+            num.innerText = i;
+            const angle = i * 30;
+            const radius = 120;
+            const radian = (angle - 90) * (Math.PI / 180);
+            const x = Math.cos(radian) * radius;
+            const y = Math.sin(radian) * radius;
+            num.style.transform = `translate(${x}px, ${y}px)`;
+            face.appendChild(num);
+        }
+
+        let isVisible = true;
+
+        function updateClock() {
+            const h = parseFloat(document.getElementById('hourInput').value);
+            const m = parseInt(document.getElementById('minuteInput').value);
+            const resultDisplay = document.getElementById('resultDisplay');
+
+            // 旋轉指針
+            document.getElementById('hourHand').style.transform = `rotate(${h * 30}deg)`;
+            document.getElementById('minuteHand').style.transform = `rotate(${m * 6}deg)`;
+
+            if (!isVisible) {
+                resultDisplay.innerText = "???";
+                return;
+            }
+
+            // 判斷邏輯
+            if (m === 0) {
+                // 時正：h 必須是整數
+                if (Number.isInteger(h)) {
+                    let displayH = h > 12 ? 1 : h;
+                    resultDisplay.innerHTML = `<span class="msg-correct">${displayH} 時正</span>`;
+                    document.body.style.background = "#1a237e"; // 深藍色背景
+                } else {
+                    resultDisplay.innerHTML = `<span class="msg-hint">⚠️ 短針要指準數字喔！</span>`;
+                }
+            } else if (m === 30) {
+                // 時半：h 必須不是整數（在中間）
+                if (!Number.isInteger(h)) {
+                    let displayH = Math.floor(h);
+                    if (displayH > 12) displayH = 1;
+                    resultDisplay.innerHTML = `<span class="msg-correct">${displayH} 時半</span>`;
+                    document.body.style.background = "#4527a0"; // 紫色背景
+                } else {
+                    resultDisplay.innerHTML = `<span class="msg-hint">⚠️ 短針要走一半喔！</span>`;
+                }
+            }
+        }
+
+        function toggleAnswer() {
+            isVisible = !isVisible;
+            document.querySelector('.btn-hide').innerText = isVisible ? "🔍 隱藏答案挑戰" : "🌟 顯示答案";
+            updateClock();
+        }
+
+        updateClock();
+    </script>
+</body>
+</html>
