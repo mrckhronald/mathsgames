@@ -88,7 +88,7 @@
             <button class="cat-btn" onclick="filterByCategory('代數')">代數 (Algebra)</button>
         </div>
 
-        <!-- 遊戲卡片列表 -->
+        <!-- 遊戲卡片列表 (全部統一放在 id="gameGrid" 裡面) -->
         <div class="game-grid" id="gameGrid">
             
             <!-- 遊戲 1：排水法 -->
@@ -107,7 +107,8 @@
                     <a href="WaterDisplacement.html" class="play-btn" target="_blank">進入遊戲 🚀</a>
                 </div>
             </div>
-<!-- 新遊戲卡片：小一 度量範疇 -->
+
+            <!-- 遊戲 2：認識時鐘 -->
             <div class="game-card" data-grade="小一" data-category="度量">
                 <div>
                     <div class="card-header">
@@ -123,9 +124,9 @@
                     <a href="clock_game.html" class="play-btn" target="_blank">進入遊戲 🚀</a>
                 </div>
             </div>
-            <!-- 之後你只要照呢個格式複製多個卡片，並更改 data-grade, data-category, 標題同連結就可以 -->
-<!-- 新遊戲卡片 -->
-            <div class="game-card" data-grade="請填寫年級" data-category="請填寫範疇">
+
+            <!-- 遊戲 3：基本加法 -->
+            <div class="game-card" data-grade="小一" data-category="數">
                 <div>
                     <div class="card-header">
                         <span class="badge-grade">小一</span>
@@ -140,9 +141,8 @@
                     <a href="P1_Addition.html" class="play-btn" target="_blank">進入遊戲 🚀</a>
                 </div>
             </div>
-        </div>
-    </div>
-<!-- 籃球乘法大賽 -->
+
+            <!-- 遊戲 4：籃球乘法大賽 -->
             <div class="game-card" data-grade="小二" data-category="數">
                 <div>
                     <div class="card-header">
@@ -158,6 +158,10 @@
                     <a href="multiplication.html" class="play-btn" target="_blank">進入遊戲 🚀</a>
                 </div>
             </div>
+
+        </div>
+    </div>
+
     <script>
         let currentGrade = 'all';
         let currentCategory = 'all';
