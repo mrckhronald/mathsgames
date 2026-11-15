@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寶可夢分數乘法大冒險</title>
+    <style>
+        :root {
+            --pk-red: #ff0000;
+            --pk-blue: #3b4cca;
+            --pk-yellow: #ffde00;
+            --pk-gold: #b3a125;
+            --grass-green: #78c850;
+        }
+
+        body { 
+            font-family: '微軟正黑體', sans-serif; 
+            background: linear-gradient(180deg, #87CEEB 0%, #78c850 100%);
+            min-height: 100vh;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 { 
+            color: white; 
+            text-shadow: 3px 3px #3b4cca, -1px -1px 0 #3b4cca, 1px -1px 0 #3b4cca, -1px 1px 0 #3b4cca, 1px 1px 0 #3b4cca;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+        }
+
+        .game-container { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 30px; 
+            border-radius: 25px; 
+            border: 8px solid var(--pk-yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+            text-align: center; 
+            max-width: 900px;
+            position: relative;
+        }
+
+        /* 裝飾性的小精靈球 */
+        .pokeball-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(to bottom, red 50%, white 50%);
+            border: 2px solid #333;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            vertical-align: middle;
+            margin: 0 10px;
+        }
+        .pokeball-icon::after {
+            content: "";
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px; height: 10px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 50%;
+        }
+
+        /* 分數排版優化 */
+        .fraction-group { display: inline-flex; align-items: center; margin: 15px; vertical-align: middle; }
+        .integer-input { 
+            width: 60px; height: 60px; font-size: 28px; text-align: center; 
+            border: 3px solid var(--pk-blue); border-radius: 10px; background: #fff;
+        }
+        .fraction-part { display: flex; flex-direction: column; align-items: center; margin-left: 5px;}
+        .num-den-input { 
+            width: 55px; height: 45px; font-size: 22px; text-align: center; 
+            border: 3px solid var(--pk-blue); border-radius: 10px; 
+        }
+        .fraction-line { width: 100%; height: 4px; background-color: #3b4cca; margin: 5px 0; border-radius: 2px; }
+        
+        .operator { font-size: 40px; margin: 0 10px; font-weight: bold; color: #ff0000; text-shadow: 1px 1px 0px white; }
+        .equals { font-size: 40px; margin: 0 10px; font-weight: bold; color: #3b4cca; }
+
+        /* 答案區域 */
+        .ans-int { border-color: var(--grass-green); background-color: #f0fff0; }
+        .ans-nd { border-color: var(--grass-green); background-color: #f0fff0; }
+
+        .btn-group { margin-top: 30px; }
+        button { 
+            padding: 12px 30px; font-size: 20px; font-weight: bold; cursor: pointer; 
+            border: none; border-radius: 50px; margin: 10px; transition: 0.2s;
+            box-shadow: 0 4px 0px rgba(0,0,0,0.2);
+        }
+        button:active { transform: translateY(4px); box-shadow: none; }
+
+        .check-btn { background-color: var(--pk-red); color: white; border: 2px solid #a00; }
+        .reset-btn { background-color: #777; color: white; }
+        .random-btn { background-color: var(--pk-yellow); color: #3b4cca; border: 2px solid var(--pk-gold); }
+
+        #result-message { 
+            margin-top: 25px; font-size: 24px; font-weight: bold; min-height: 40px; 
+            padding: 10px; border-radius: 10px;
+        }
+        .correct { color: #2d8a2d; background: #eaffea; border: 2px solid #2d8a2d; animation: bounce 0.5s; }
+        .incorrect { color: #c0392b; background: #ffeaea; border: 2px solid #c0392b; }
+
+        .hint { 
+            color: #333; font-size: 18px; margin-top: 20px; white-space: pre-line; 
+            text-align: left; background: #fdf6e3; padding: 20px; border-radius: 15px; 
+            display: none; border-left: 10px solid var(--pk-blue);
+        }
+
+        .oak-speech {
+            font-size: 18px; color: #444; margin-bottom: 20px;
+            font-style: italic; background: #eee; padding: 10px; border-radius: 10px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 600px) {
+            .fraction-group { margin: 5px; }
+            .integer-input, .num-den-input { width: 45px; height: 45px; font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>⚡ 皮卡丘的分數乘法冒險 ⚡</h1>
+    
+    <div class="game-container">
+        <div class="oak-speech">
+            👴 大木博士：訓練家，準備好收服分數了嗎？<br>
+            設定題目或點擊隨機，將答案化為「最簡帶分數」即可收服成功！
+        </div>
+
+        <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <!-- 分數 1 -->
+            <div class="fraction-group">
+                <input type="number" id="int1" class="integer-input" placeholder="整">
+                <div class="fraction-part">
+                    <input type="number" id="num1" class="num-den-input" placeholder="子">
+                    <div class="fraction-line"></div>
+                    <input type="number" id="den1" class="num-den-input" placeholder="母">
+                </div>
+            </div>
+
+            <span class="operator">×</span>
+
+            <!-- 分數 2 -->
+            <div class="fraction-group">
+                <input type="number" id="int2" class="integer-input" placeholder="整">
+                <div class="fraction-part">
+                    <input type="number" id="num2" class="num-den-input" placeholder="子">
+                    <div class="fraction-line"></div>
+                    <input type="number" id="den2" class="num-den-input" placeholder="母">
+                </div>
+            </div>
+
+            <span class="equals">=</span>
+
+            <!-- 答案區 -->
+            <div class="fraction-group">
+                <input type="number" id="ansInt" class="integer-input ans-int" placeholder="整">
+                <div class="fraction-part">
+                    <input type="number" id="ansNum" class="num-den-input ans-nd" placeholder="子">
+                    <div class="fraction-line"></div>
+                    <input type="number" id="ansDen" class="num-den-input ans-nd" placeholder="母">
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="random-btn" onclick="randomQuestion()">🔍 搜尋野生題目</button>
+            <button class="check-btn" onclick="checkAnswer()"><div class="pokeball-icon"></div> 丟出精靈球！</button>
+            <button class="reset-btn" onclick="resetFields()">🔄 回中心恢復</button>
+        </div>
+
+        <div id="result-message"></div>
+        <div id="hint-box" class="hint"></div>
+    </div>
+
+    <script>
+        function gcd(a, b) {
+            return b == 0 ? a : gcd(b, a % b);
+        }
+
+        function getValue(intId, numId, denId) {
+            let i = parseInt(document.getElementById(intId).value) || 0;
+            let n = parseInt(document.getElementById(numId).value) || 0;
+            let d = parseInt(document.getElementById(denId).value);
+            
+            if (isNaN(d)) {
+                if (n !== 0) return null;
+                return { val: i, n: i, d: 1, i: i, rawN: 0 };
+            }
+            if (d === 0) return null;
+            let totalNum = i * d + n;
+            return { val: totalNum / d, n: totalNum, d: d, i: i, rawN: n };
+        }
+
+        function checkAnswer() {
+            const msg = document.getElementById("result-message");
+            const hint = document.getElementById("hint-box");
+            hint.style.display = "none";
+
+            let f1 = getValue("int1", "num1", "den1");
+            let f2 = getValue("int2", "num2", "den2");
+
+            if (!f1 || !f2) {
+                msg.textContent = "⚠️ 博士提示：請填寫完整題目，分母不能為 0 哦！";
+                msg.className = "incorrect";
+                return;
+            }
+
+            let correctNum = f1.n * f2.n;
+            let correctDen = f1.d * f2.d;
+            
+            let common = gcd(correctNum, correctDen);
+            let simpNum = correctNum / common;
+            let simpDen = correctDen / common;
+
+            let finalInt = Math.floor(simpNum / simpDen);
+            let finalRemNum = simpNum % simpDen;
+
+            let ansI = parseInt(document.getElementById("ansInt").value) || 0;
+            let ansN = parseInt(document.getElementById("ansNum").value) || 0;
+            let ansD = parseInt(document.getElementById("ansDen").value);
+
+            if (isNaN(ansD) && ansN !== 0) {
+                msg.textContent = "⚠️ 哎呀！精靈球壞了？（答案分母漏填了）";
+                msg.className = "incorrect";
+                return;
+            }
+            if (isNaN(ansD)) ansD = 1; 
+
+            let studentValNum = ansI * ansD + ansN;
+            let studentVal = studentValNum / ansD;
+            let correctVal = simpNum / simpDen;
+
+            if (Math.abs(studentVal - correctVal) < 0.000001) {
+                let isSimplest = true;
+                if (ansN > 0 && ansD > 0) {
+                    if (gcd(ansN, ansD) !== 1) isSimplest = false; 
+                    if (ansN >= ansD) isSimplest = false; 
+                }
+                if (ansN === 0 && finalRemNum !== 0) isSimplest = false;
+
+                if (isSimplest) {
+                    msg.innerHTML = "✨ 完美！收服成功！ ✨<br><small>你獲得了 100 經驗值！</small>";
+                    msg.className = "correct";
+                } else {
+                    msg.textContent = "🤔 數值對了，但這不是最精簡的型態，再加把勁！";
+                    msg.className = "incorrect";
+                }
+            } else {
+                msg.textContent = "💨 喔不！寶可夢逃走了... (答案不正確)";
+                msg.className = "incorrect";
+                
+                hint.style.display = "block";
+                hint.innerHTML = `
+                    <strong>📜 大木博士的圖鑑提示：</strong><br>
+                    1. 先變身假分數： ${f1.n}/${f1.d} × ${f2.n}/${f2.d}<br>
+                    2. 招式：分子乘分子 (${f1.n} × ${f2.n} = ${correctNum})<br>
+                    3. 招式：分母乘分母 (${f1.d} × ${f2.d} = ${correctDen})<br>
+                    4. 初步結果： ${correctNum}/${correctDen}<br>
+                    5. 化為最簡帶分數：<br>
+                       👉 <strong>整數：${finalInt}，分子：${finalRemNum}，分母：${simpDen}</strong>
+                `;
+            }
+        }
+
+        function randomQuestion() {
+            // 隨機產生較小的數字以便計算
+            document.getElementById("int1").value = Math.floor(Math.random() * 2);
+            document.getElementById("num1").value = Math.floor(Math.random() * 4) + 1;
+            document.getElementById("den1").value = Math.floor(Math.random() * 3) + 5;
+
+            document.getElementById("int2").value = Math.floor(Math.random() * 2);
+            document.getElementById("num2").value = Math.floor(Math.random() * 4) + 1;
+            document.getElementById("den2").value = Math.floor(Math.random() * 3) + 5;
+            
+            document.getElementById("ansInt").value = "";
+            document.getElementById("ansNum").value = "";
+            document.getElementById("ansDen").value = "";
+            document.getElementById("result-message").textContent = "";
+            document.getElementById("result-message").className = "";
+            document.getElementById("hint-box").style.display = "none";
+        }
+
+        function resetFields() {
+            document.querySelectorAll('input').forEach(input => input.value = '');
+            document.getElementById("result-message").textContent = "";
+            document.getElementById("result-message").className = "";
+            document.getElementById("hint-box").style.display = "none";
+        }
+    </script>
+</body>
+</html>
