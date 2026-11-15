@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小二數學：籃球乘法對決 🏀</title>
+    <style>
+        :root {
+            --court-color: #e67e22;
+            --line-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Arial', "Microsoft JhengHei", sans-serif;
+            background-color: #2c3e50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            overflow: hidden;
+        }
+
+        h1 { margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+
+        /* 籃球場設計 */
+        #court {
+            width: 90%;
+            max-width: 900px;
+            height: 250px;
+            background-color: var(--court-color);
+            background-image: 
+                linear-gradient(90deg, transparent 49%, var(--line-color) 49%, var(--line-color) 51%, transparent 51%),
+                radial-gradient(circle at 50% 50%, transparent 20%, var(--line-color) 20%, var(--line-color) 22%, transparent 22%);
+            border: 5px solid var(--line-color);
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin: 20px 0;
+        }
+
+        /* 籃框設計 */
+        .hoop {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            background: #333;
+            border-bottom: 5px solid red;
+        }
+        .hoop-left { left: 0; border-radius: 0 10px 10px 0; }
+        .hoop-right { right: 0; border-radius: 10px 0 0 10px; }
+        
+        .backboard {
+            width: 10px;
+            height: 60px;
+            background: white;
+            position: absolute;
+            top: 10px;
+        }
+        .hoop-left .backboard { left: 0; }
+        .hoop-right .backboard { right: 0; }
+
+        /* 籃球設計 */
+        #basketball {
+            width: 50px;
+            height: 50px;
+            background: #ff8c00;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.3), 0 5px 10px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            z-index: 10;
+        }
+        /* 籃球上的線條 */
+        #basketball::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(0,0,0,0.4);
+        }
+        #basketball::after {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+        }
+
+        /* 題目區域 */
+        #game-ui {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        #question-box {
+            font-size: 80px;
+            font-weight: bold;
+            color: #f1c40f;
+            text-shadow: 3px 3px 0px #d35400;
+            margin-bottom: 10px;
+        }
+
+        /* 輸入區域 */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .player-zone {
+            padding: 15px;
+            border-radius: 10px;
+            width: 45%;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .player-blue { border-left: 8px solid #3498db; }
+        .player-red { border-right: 8px solid #e74c3c; }
+
+        input {
+            width: 100px;
+            font-size: 30px;
+            text-align: center;
+            border-radius: 10px;
+            border: none;
+            padding: 10px;
+            margin-bottom: 5px;
+        }
+
+        .key-hint {
+            font-size: 14px;
+            color: #bdc3c7;
+        }
+
+        #status-msg {
+            font-size: 24px;
+            height: 30px;
+            color: #2ecc71;
+            margin-top: 10px;
+        }
+
+        /* 灌籃彈出視窗 */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .dunk-anim {
+            animation: bounce 0.5s infinite alternate;
+            font-size: 100px;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-30px); }
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 24px;
+            background: #f39c12;
+            border: none;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover { transform: scale(1.1); background: #e67e22; }
+    </style>
+</head>
+<body>
+
+    <h1>🏀 乘法進攻：籃球大戰 🏀</h1>
+
+    <div id="court">
+        <div class="hoop hoop-left"><div class="backboard"></div></div>
+        <div id="basketball">🏀</div>
+        <div class="hoop hoop-right"><div class="backboard"></div></div>
+    </div>
+
+    <div id="game-ui">
+        <div id="question-box">準備比賽...</div>
+        <div id="status-msg"></div>
+
+        <div class="controls">
+            <div class="player-zone player-blue">
+                <div>勇士隊 (左)</div>
+                <input type="number" id="ans1" placeholder="?">
+                <div class="key-hint">輸入完按鍵盤 <b>"A"</b></div>
+            </div>
+            
+            <div class="player-zone player-red">
+                <div>公牛隊 (右)</div>
+                <input type="number" id="ans2" placeholder="?">
+                <div class="key-hint">輸入完按鍵盤 <b>"L"</b></div>
+            </div>
+        </div>
+        <br>
+        <button onclick="nextRound()">開始 / 下一題</button>
+    </div>
+
+    <!-- 獲勝畫面 -->
+    <div id="overlay" class="overlay">
+        <div class="dunk-anim">🔥 SLAM DUNK! 🔥</div>
+        <h1 id="winner-name">某某隊獲勝</h1>
+        <button onclick="resetGame()">回球場重賽</button>
+    </div>
+
+    <script>
+        let currentAns = 0;
+        let ballPos = 50; // 50% 為中心
+        const moveStep = 10; // 答對移動 10%
+
+        const ball = document.getElementById('basketball');
+        const questionBox = document.getElementById('question-box');
+        const statusMsg = document.getElementById('status-msg');
+        const ans1 = document.getElementById('ans1');
+        const ans2 = document.getElementById('ans2');
+        const overlay = document.getElementById('overlay');
+        const winnerName = document.getElementById('winner-name');
+
+        function generateQuestion() {
+            const n1 = Math.floor(Math.random() * 9) + 2; // 2-10
+            const n2 = Math.floor(Math.random() * 9) + 1; // 1-9
+            currentAns = n1 * n2;
+            questionBox.innerText = `${n1} × ${n2}`;
+        }
+
+        function nextRound() {
+            ans1.value = '';
+            ans2.value = '';
+            statusMsg.innerText = "比賽開始，快出手！";
+            generateQuestion();
+            ans1.focus();
+        }
+
+        // 監聽鍵盤
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'a' || e.key === 'A') {
+                check('left');
+            }
+            if (e.key === 'l' || e.key === 'L') {
+                check('right');
+            }
+        });
+
+        function check(side) {
+            let val = (side === 'left') ? parseInt(ans1.value) : parseInt(ans2.value);
+            
+            if (isNaN(val)) return;
+
+            if (val === currentAns) {
+                if (side === 'left') {
+                    ballPos -= moveStep; // 往左邊進攻(目標左籃框)
+                    statusMsg.innerText = "🏀 勇士隊漂亮運球！";
+                } else {
+                    ballPos += moveStep; // 往右邊進攻
+                    statusMsg.innerText = "🏀 公牛隊快速反擊！";
+                }
+                updateBall();
+                checkWinner();
+                
+                if (ballPos > 10 && ballPos < 90) {
+                    generateQuestion();
+                    ans1.value = '';
+                    ans2.value = '';
+                }
+            } else {
+                statusMsg.innerText = "❌ 投籃麵包（答錯了）！";
+                if (side === 'left') ans1.value = '';
+                else ans2.value = '';
+            }
+        }
+
+        function updateBall() {
+            ball.style.left = ballPos + '%';
+            // 增加旋轉動畫感
+            ball.style.transform = `translateX(-50%) rotate(${ballPos * 5}deg)`;
+        }
+
+        function checkWinner() {
+            if (ballPos <= 10) {
+                win("🏆 勇士隊 (左邊) 灌籃成功！獲勝！");
+            } else if (ballPos >= 90) {
+                win("🏆 公牛隊 (右邊) 灌籃成功！獲勝！");
+            }
+        }
+
+        function win(msg) {
+            winnerName.innerText = msg;
+            overlay.style.display = 'flex';
+        }
+
+        function resetGame() {
+            ballPos = 50;
+            updateBall();
+            overlay.style.display = 'none';
+            nextRound();
+        }
+
+        // 初始化
+        generateQuestion();
+    </script>
+</body>
+</html>
