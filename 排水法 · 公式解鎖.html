@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>排水法 · 公式解鎖</title>
+<meta name="color-scheme" content="light dark">
+<style>
+:root{--bg:#eaf5f9;--panel:#ffffff;--ink:#0e2a38;--mut:#4d6b79;--line:#b4d3df;--aqua:#0b84a5;--aquaS:rgba(11,132,165,.2);--amber:#c97800;--amberS:rgba(201,120,0,.18);--bad:#b53a2b;--ok:#17724a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#081a26;--panel:#102a3a;--ink:#e6f3f8;--mut:#9bb8c6;--line:#2b4a5c;--aqua:#4fd1e8;--aquaS:rgba(79,209,232,.22);--amber:#ffb54a;--amberS:rgba(255,181,74,.2);--bad:#ff8a7a;--ok:#5fe0a4}}
+:root[data-theme="dark"]{--bg:#081a26;--panel:#102a3a;--ink:#e6f3f8;--mut:#9bb8c6;--line:#2b4a5c;--aqua:#4fd1e8;--aquaS:rgba(79,209,232,.22);--amber:#ffb54a;--amberS:rgba(255,181,74,.2);--bad:#ff8a7a;--ok:#5fe0a4}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;line-height:1.6;min-height:100vh}
+main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.4rem;line-height:1.35;margin:.2rem 0 1rem;font-weight:800}
+.sys{margin:0;color:var(--aqua);font-weight:700;font-size:.95rem}
+svg{width:100%;height:auto;display:block;margin:0 auto 12px;max-width:380px}
+.face{fill:none;stroke:var(--mut);stroke-width:1.6;stroke-linejoin:round}
+.hid{fill:none;stroke:var(--mut);stroke-width:1.6;stroke-dasharray:5 4;stroke-linecap:round}
+.vol{fill:transparent;transition:fill .3s}
+.volOn .vol{fill:var(--aquaS)}
+.base{fill:transparent;stroke:transparent;stroke-width:2;stroke-dasharray:5 3;transition:all .3s}
+.baseOn .base{fill:var(--aquaS);stroke:var(--aqua)}
+.hline{stroke:var(--mut);stroke-width:2;transition:all .3s}
+.hOn .hline{stroke:var(--amber);stroke-width:5}
+.len{stroke:transparent;stroke-width:5;transition:stroke .3s}
+.lenOn .len{stroke:var(--aqua)}
+.wid{stroke:transparent;stroke-width:5;transition:stroke .3s}
+.widOn .wid{stroke:var(--aqua)}
+svg text{fill:var(--mut);font-size:13px;font-weight:700}
+.hOn .ht{fill:var(--amber)}
+.baseOn .bt{fill:var(--aqua)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 16px}
+.qno{margin:0 0 10px;color:var(--mut);font-size:.9rem}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:1.35rem;font-weight:700;margin-bottom:14px}
+.blank{min-width:5.6em;min-height:2.6rem;padding:4px 10px;border:2px dashed var(--line);border-radius:10px;background:transparent;color:var(--ink);font:inherit;font-size:1.05rem;cursor:pointer}
+.blank.full{border-style:solid;border-color:var(--aqua);background:var(--aquaS)}
+.blank:focus-visible,.chip:focus-visible,.btn:focus-visible,.part:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.tip{margin:0 0 10px;color:var(--mut);font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.chip{padding:8px 16px;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);font:inherit;font-size:1.05rem;cursor:pointer}
+.chip:disabled{opacity:.35;cursor:default}
+.btn{width:100%;padding:12px;border:0;border-radius:10px;background:var(--aqua);color:#fff;font:inherit;font-weight:700;font-size:1.05rem;cursor:pointer}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#06222c}}
+:root[data-theme="dark"] .btn{color:#06222c}
+.btn:disabled{opacity:.4;cursor:default}
+#fb{min-height:1.6em;margin:12px 0 0;font-weight:600}
+#fb.ok{color:var(--ok)}#fb.no{color:var(--bad)}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}*{transition:none!important}}
+.parts{display:grid;gap:12px;margin-top:14px}
+.part{text-align:left;padding:16px;border:1.5px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}
+.part b{display:block;font-size:1.1rem;margin-bottom:2px}
+.part span{color:var(--mut);font-size:.92rem}
+#soon{margin:12px 0 0;color:var(--amber);font-weight:600;min-height:1.6em}
+.formula{padding:10px 14px;border-radius:10px;background:var(--aquaS);font-weight:700;margin:0 0 6px}
+main.wide{max-width:1000px}
+.lab{display:grid;gap:14px}
+@media (min-width:780px){.lab{grid-template-columns:1fr 300px;align-items:start}}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;aspect-ratio:5/4}
+#cv,#cv2,#cv3,#cv4{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.row{display:flex;justify-content:space-between;font-weight:700}
+input[type=range]{width:100%;accent-color:var(--aqua);margin:6px 0 16px}
+#ares{min-height:3.4em;margin:12px 0 4px;font-weight:700;color:var(--amber)}
+.views{display:flex;gap:10px;margin-top:10px}
+.back{margin-top:16px}
+.stones{display:flex;gap:8px;margin:8px 0 4px}
+.stbtn{flex:1;padding:6px 4px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:.9rem;cursor:pointer}
+.stbtn[aria-pressed="true"]{border-color:var(--aqua);background:var(--aquaS);font-weight:700}
+.stout{flex:.8;border-color:var(--amber)}
+.ans{margin-top:14px;padding:12px;border:1.5px solid var(--amber);border-radius:12px;font-weight:700;font-size:1.05rem}
+.ans input{width:5em;margin:0 6px;padding:4px 8px;font:inherit;text-align:center;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.ans input:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-color:var(--amber)}
+#afb{min-height:1.5em;margin:8px 0 0;font-size:.95rem}
+#afb.ok{color:var(--ok)}
+#afb.no{color:var(--bad)}
+.stbtn:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+[hidden]{display:none!important}
+#p2 .stage{aspect-ratio:1/1}
+#m2{min-height:2.8em;margin:4px 0 8px;font-size:.88rem;color:var(--amber)}
+#f2{min-height:1.5em;margin:8px 0 0;font-size:.95rem}
+#f2.ok{color:var(--ok)}
+#f2.no{color:var(--bad)}
+#f2o{min-height:1.5em;margin:8px 0 0;font-size:.95rem}
+#f2o.ok{color:var(--ok)}
+#f2o.no{color:var(--bad)}
+#m3{min-height:2.8em;margin:4px 0 8px;font-size:.88rem;color:var(--amber)}
+#f3{min-height:1.5em;margin:8px 0 0;font-size:.95rem}
+#f3.ok{color:var(--ok)}
+#f3.no{color:var(--bad)}
+.info{padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;font-weight:700;margin-bottom:14px;line-height:1.7}
+#ar4[aria-pressed="true"]{background:var(--amberS)!important;color:var(--amber)!important;border:2px solid var(--amber)}
+#tg4{margin-top:10px}
+#f4{min-height:1.5em;margin:8px 0 0;font-size:.95rem}
+#f4.ok{color:var(--ok)}
+#f4.no{color:var(--bad)}
+.ans .note{margin:8px 0 0;font-size:.85rem;font-weight:400;color:var(--mut)}
+#tg4[aria-pressed="true"]{background:transparent!important;color:var(--amber)!important;border:2px solid var(--amber)}
+#zoom{background:transparent!important;color:var(--aqua)!important;border:2px solid var(--aqua)}
+#zoom[aria-pressed="true"]{background:var(--aquaS)!important}
+#p1 .row:has(label),#rl,#rw,#rh,#area,#ares,#p1 .views{display:none!important}
+#stmsg{min-height:2.8em;margin:4px 0 8px;font-size:.88rem;color:var(--amber)}
+</style>
+</head>
+<body>
+<main>
+<section id="gate">
+  <p class="sys">系統啟動中</p>
+  <h1>完成公式，解鎖排水法模擬室</h1>
+  <svg id="tank" viewBox="0 0 280 200" role="img" aria-label="長方體水缸：底面積、高">
+    <polygon class="vol" points="40,70 90,30 250,30 250,130 200,170 40,170"/>
+    <g class="baseG"><polygon class="base" points="40,170 200,170 250,130 90,130"/></g>
+    <polygon class="face" points="40,70 200,70 200,170 40,170"/>
+    <polygon class="face" points="200,70 250,30 250,130 200,170"/>
+    <polygon class="face" points="40,70 90,30 250,30 200,70"/>
+    <line class="hid" x1="90" y1="130" x2="40" y2="170"/>
+    <line class="hid" x1="90" y1="130" x2="90" y2="30"/>
+    <line class="hid" x1="90" y1="130" x2="250" y2="130"/>
+    <line class="len" x1="40" y1="170" x2="200" y2="170"/>
+    <line class="wid" x1="200" y1="170" x2="250" y2="130"/>
+    <line class="hline" x1="22" y1="170" x2="22" y2="70"/>
+    <line class="hline" x1="16" y1="70" x2="28" y2="70"/>
+    <line class="hline" x1="16" y1="170" x2="28" y2="170"/>
+    <text class="ht" x="2" y="125">高</text>
+    <text class="bt" x="122" y="154" text-anchor="middle">底面積</text>
+  </svg>
+  <div class="card">
+    <p class="qno" id="qno"></p>
+    <div class="eq" id="eq"></div>
+    <p class="tip">點選下面嘅詞語填入空格；點返空格可以清除。</p>
+    <div class="chips" id="chips"></div>
+    <button class="btn" id="check" disabled>檢查答案</button>
+    <p id="fb" role="status"></p>
+  </div>
+</section>
+
+<section id="hub" hidden>
+  <p class="sys">解鎖成功</p>
+  <h1>排水法模擬室</h1>
+  <p class="formula">體積 = 底面積 × 高　　高 = 體積 ÷ 底面積</p>
+  <p class="tip">揀一個部分開始探索。</p>
+  <div class="parts">
+    <button class="part" data-p="1"><b>第一部分：閱讀量杯</b><span>放入石頭，睇溢出嘅水流入量杯，讀出石頭嘅體積。</span></button>
+    <button class="part" data-p="2"><b>第二部分：閱讀量杯（二）</b><span>石頭放入已有水嘅量杯，睇水位上升，搵出石頭嘅體積。</span></button>
+    <button class="part" data-p="3"><b>第三部分：排水法與水缸</b><span>石頭排出嘅水流入長方體水缸，用長、闊、水位的高計算石頭體積。</span></button>
+    <button class="part" data-p="4"><b>第四部分：排水法應用</b><span>已知石頭體積同水缸嘅長、闊，睇水位上升咗幾多。</span></button>
+  </div>
+  <p id="soon" role="status"></p>
+</section>
+
+<section id="p1" hidden>
+  <p class="sys">第一部分</p>
+  <h1>閱讀量杯</h1>
+  <div class="lab">
+    <div class="stage"><canvas id="cv" role="img" aria-label="格仔地面上嘅長方體水缸"></canvas></div>
+    <div class="card">
+      <div class="row"><label for="rl">長度</label><output id="ol">5 cm</output></div>
+      <input type="range" id="rl" min="3" max="10" step="1" value="5">
+      <div class="row"><label for="rw">闊度</label><output id="ow">5 cm</output></div>
+      <input type="range" id="rw" min="3" max="10" step="1" value="5">
+      <div class="row"><label for="rh">水位的高</label><output id="oh">4 cm</output></div>
+      <input type="range" id="rh" min="3" max="10" step="1" value="4">
+      <button class="btn" id="area">顯示底面積</button>
+      <p id="ares" role="status"></p>
+      <div class="row"><span>置入不規則石頭</span></div>
+      <div class="stones"><button class="stbtn" data-s="A" aria-pressed="false">石頭A</button><button class="stbtn" data-s="B" aria-pressed="false">石頭B</button><button class="stbtn" data-s="C" aria-pressed="false">石頭C</button><button class="stbtn stout" id="stout" data-s="out">取出</button></div>
+      <p id="stmsg" role="status"></p>
+      <button class="btn" id="zoom" aria-pressed="false">量杯</button>
+      <p class="tip">撳一下放一粒石頭（最多 3 粒，只可以放同一種）。睇溢出嘅水流入量杯，量杯每小格 20 mL，每大格 100 mL，讀出水量就知道石頭嘅體積。</p>
+      <div class="views"><button class="chip" id="vTop">俯視</button><button class="chip" id="v3d">立體</button></div>
+      <div class="ans" id="ans" hidden><label for="ain">石頭<span id="aname"></span>的體積是<input id="ain" type="text" inputmode="decimal" autocomplete="off" maxlength="6">cm³</label>
+        <button class="btn" id="ack" type="button" style="margin-top:10px">檢查答案</button>
+        <p id="afb" role="status"></p></div>
+    </div>
+  </div>
+  <button class="chip back" id="back">返回</button>
+</section>
+
+<section id="p2" hidden>
+  <p class="sys">第二部分</p>
+  <h1>閱讀量杯（二）</h1>
+  <div class="lab">
+    <div class="stage"><canvas id="cv2" role="img" aria-label="已經有水嘅量杯，可以放入石頭"></canvas></div>
+    <div class="card">
+      <div class="row"><span>置入不規則石頭</span></div>
+      <div class="stones"><button class="stbtn" data-s="A" aria-pressed="false">石頭A</button><button class="stbtn" data-s="B" aria-pressed="false">石頭B</button><button class="stbtn" data-s="C" aria-pressed="false">石頭C</button><button class="stbtn stout" id="out2">取出</button></div>
+      <p id="m2" role="status"></p>
+      <p class="tip">量杯入面本來已經有水。撳一下放一粒石頭（最多 3 粒，只可以放同一種）。睇水位升咗幾多，量杯每小格 100 mL，每大格 500 mL，最多 1 L。</p>
+      <div class="ans" id="a2o"><label for="i2o">量杯內原有水<input id="i2o" type="text" inputmode="decimal" autocomplete="off" maxlength="6">mL</label>
+        <button class="btn" id="k2o" type="button" style="margin-top:10px">檢查答案</button>
+        <p id="f2o" role="status"></p></div>
+      <div class="ans" id="a2" hidden><label for="i2">石頭<span id="n2"></span>的體積是<input id="i2" type="text" inputmode="decimal" autocomplete="off" maxlength="6">cm³</label>
+        <button class="btn" id="k2" type="button" style="margin-top:10px">檢查答案</button>
+        <p id="f2" role="status"></p></div>
+    </div>
+  </div>
+  <button class="chip back" id="back2">返回</button>
+</section>
+
+<section id="p3" hidden>
+  <p class="sys">第三部分</p>
+  <h1>排水法與水缸</h1>
+  <div class="lab">
+    <div class="stage"><canvas id="cv3" role="img" aria-label="排水法：石頭放入溢水杯，溢出嘅水流入長方體水缸"></canvas></div>
+    <div class="card">
+      <div class="row"><span>置入不規則石頭</span></div>
+      <div class="stones"><button class="stbtn" data-s="A" aria-pressed="false">石頭A</button><button class="stbtn" data-s="B" aria-pressed="false">石頭B</button><button class="stbtn" data-s="C" aria-pressed="false">石頭C</button><button class="stbtn stout" id="out3">取出</button></div>
+      <p id="m3" role="status"></p>
+      <p class="tip">石頭放入左面嘅杯，溢出嘅水會流入右面嘅長方體水缸。撳一下放一粒石頭（最多 3 粒，只可以放同一種）。睇水缸嘅長、闊同水位的高，就可以搵出石頭嘅體積。</p>
+      <div class="ans" id="a3" hidden><label for="i3">石頭<span id="n3"></span>的體積是<input id="i3" type="text" inputmode="decimal" autocomplete="off" maxlength="6">cm³</label>
+        <button class="btn" id="k3" type="button" style="margin-top:10px">檢查答案</button>
+        <p id="f3" role="status"></p></div>
+    </div>
+  </div>
+  <button class="chip back" id="back3">返回</button>
+</section>
+
+<section id="p4" hidden>
+  <p class="sys">第四部分</p>
+  <h1>排水法應用</h1>
+  <div class="lab">
+    <div class="stage"><canvas id="cv4" role="img" aria-label="長方體水缸，放入石頭後水位上升"></canvas></div>
+    <div class="card">
+      <div class="info">已知：<br>石頭體積 = 20 cm³</div>
+      <div class="row"><label for="rl4">長度</label><output id="ol4">5 cm</output></div>
+      <input type="range" id="rl4" min="4" max="10" step="1" value="5">
+      <div class="row"><label for="rw4">闊度</label><output id="ow4">5 cm</output></div>
+      <input type="range" id="rw4" min="4" max="10" step="1" value="5">
+      <button class="btn" id="ar4" type="button" aria-pressed="false">顯示底面積</button>
+      <button class="btn" id="tg4" type="button" aria-pressed="false">放入石頭</button>
+      <p class="tip">用滑桿改變水缸嘅長同闊，再放入石頭，睇水位上升咗幾多。拖曳畫面可以轉視角。</p>
+      <div class="ans"><label for="i4">水位上升咗<input id="i4" type="text" inputmode="decimal" autocomplete="off" maxlength="6">cm</label>
+        <p class="note">如果除唔盡，請四捨五入至小數後兩位。</p>
+        <button class="btn" id="k4" type="button" style="margin-top:10px">檢查答案</button>
+        <p id="f4" role="status"></p></div>
+    </div>
+  </div>
+  <button class="chip back" id="back4">返回</button>
+</section>
+</main>
+<script>
+(function(){
+  var Q=[
+    {lhs:'底面積',op:'×',ans:['長','闊'],ordered:false,chips:['高','體積','闊','長'],hint:'長方形嘅面積 = 長 × 闊。'},
+    {lhs:'體積',op:'×',ans:['底面積','高'],ordered:false,chips:['高','體積','長','闊','底面積'],hint:'長方體（水缸）嘅體積 = 底面積 × 高，再諗諗邊兩個先啱。'},
+    {lhs:'高',op:'÷',ans:['體積','底面積'],ordered:true,chips:['底面積','體積'],hint:'由 體積 = 底面積 × 高 倒轉嚟諗：高 = 體積 ÷ 底面積。'}
+  ];
+  var cls={'底面積':'baseOn','高':'hOn','體積':'volOn','長':'lenOn','闊':'widOn'};
+  var qi=0,fill=[null,null];
+  var eq=document.getElementById('eq'),chips=document.getElementById('chips'),fb=document.getElementById('fb'),
+      check=document.getElementById('check'),tank=document.getElementById('tank'),qno=document.getElementById('qno');
+  function render(){
+    var q=Q[qi];
+    qno.textContent='第 '+(qi+1)+' / '+Q.length+' 題：填寫公式';
+    eq.innerHTML='';
+    var l=document.createElement('span');l.textContent=q.lhs+' =';eq.appendChild(l);
+    for(var i=0;i<2;i++){
+      var b=document.createElement('button');b.type='button';b.className='blank';b.dataset.i=i;
+      b.setAttribute('aria-label','空格 '+(i+1));
+      b.onclick=(function(i){return function(){fill[i]=null;sync();}})(i);
+      eq.appendChild(b);
+      if(i===0){var o=document.createElement('span');o.textContent=q.op;eq.appendChild(o);}
+    }
+    chips.innerHTML='';
+    q.chips.forEach(function(n){
+      var c=document.createElement('button');c.type='button';c.className='chip';c.textContent=n;
+      c.onclick=function(){var k=fill.indexOf(null);if(k>-1){fill[k]=n;sync();}};
+      chips.appendChild(c);
+    });
+    sync();
+  }
+  function sync(){
+    var bl=eq.querySelectorAll('.blank');
+    for(var i=0;i<2;i++){bl[i].textContent=fill[i]||'';bl[i].classList.toggle('full',!!fill[i]);}
+    chips.querySelectorAll('.chip').forEach(function(c){c.disabled=fill.indexOf(c.textContent)>-1;});
+    check.disabled=fill.indexOf(null)>-1;
+    tank.setAttribute('class','');
+    fill.forEach(function(n){if(n)tank.classList.add(cls[n]);});
+    fb.textContent='';fb.className='';
+  }
+  function say(t,k){fb.textContent=t;fb.className=k;}
+  check.onclick=function(){
+    var q=Q[qi],a=q.ans,ok;
+    if(q.ordered)ok=fill[0]===a[0]&&fill[1]===a[1];
+    else ok=(fill[0]===a[0]&&fill[1]===a[1])||(fill[0]===a[1]&&fill[1]===a[0]);
+    if(ok){
+      check.disabled=true;
+      if(qi<Q.length-1){
+        say('正確！下一題。','ok');
+        setTimeout(function(){qi++;fill=[null,null];render();},900);
+      }else{
+        say('全部正確，模擬室解鎖中⋯','ok');
+        ['baseOn','hOn','volOn'].forEach(function(c){tank.classList.add(c);});
+        setTimeout(function(){document.getElementById('gate').hidden=true;document.getElementById('hub').hidden=false;window.scrollTo(0,0);},1100);
+      }
+    }else{
+      var swap=q.ordered&&fill[0]===a[1]&&fill[1]===a[0];
+      say(swap?'兩個詞語啱，但次序反咗：邊個除以邊個？'+q.hint:'未啱，再試下。提示：'+q.hint,'no');
+      eq.classList.remove('shake');void eq.offsetWidth;eq.classList.add('shake');
+    }
+  };
+  document.querySelectorAll('.part').forEach(function(b){
+    b.onclick=function(){document.getElementById('soon').textContent='第'+['','一','二','三','四'][+b.dataset.p]+'部分製作中，下一步先整。';};
+  });
+  render();
+})();
+</script>
+<script>
+(function(){
+  var hub=document.getElementById('hub'),p1=document.getElementById('p1'),main=document.querySelector('main');
+  var cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+  var rl=document.getElementById('rl'),rw=document.getElementById('rw'),ol=document.getElementById('ol'),rh=document.getElementById('rh'),oh=document.getElementById('oh'),ow=document.getElementById('ow'),ab=document.getElementById('area'),ares=document.getElementById('ares');
+  var cam={x:6,y:5,z:5,k:1},zm=false,tw=null;
+  var L=6,W=5,H=12,h=8,st=null,ns=[],raf=null,show=false,yaw=-0.5,pit=0.6,dpr=1,S=20,cw=0,ch=0,C={};
+  function V(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function P(x,y,z){
+    x-=cam.x;z-=cam.z;y-=cam.y;
+    var c=Math.cos(yaw),s=Math.sin(yaw),X=x*c+z*s,Z=-x*s+z*c;
+    var Y=y*Math.cos(pit)+Z*Math.sin(pit);
+    return [cw/2+S*X,ch/2-S*Y,Z*Math.cos(pit)-y*Math.sin(pit)];
+  }
+  function seg(a,b){var p=P(a[0],a[1],a[2]),q=P(b[0],b[1],b[2]);ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);}
+  function poly(pts,col,al){ctx.globalAlpha=al;ctx.fillStyle=col;ctx.beginPath();pts.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.fill();ctx.globalAlpha=1;}
+  function pill(t,p,col){
+    ctx.font='700 13px "Noto Sans TC",system-ui,sans-serif';
+    var w=ctx.measureText(t).width+16,h=24,x=p[0]-w/2,y=p[1]-h/2;
+    ctx.fillStyle=C.panel;ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();
+    if(ctx.roundRect)ctx.roundRect(x,y,w,h,8);else ctx.rect(x,y,w,h);
+    ctx.fill();ctx.stroke();
+    ctx.fillStyle=C.ink;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t,p[0],p[1]+1);
+  }
+  var msg=document.getElementById('stmsg');
+  var ST={A:{v:30,d:[3,2.6,2.8],s:1},B:{v:90,d:[4.3,3.7,4],s:2},C:{v:150,d:[5.1,4.4,4.8],s:3}},TK=.6,CX=12.4,CZ=2.5,CR=1.3,CH=6;
+  var FA=[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],[3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]];
+  function mk(o){
+    var t=(1+Math.sqrt(5))/2,b=[[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],[t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]],mn=1e9,mx=-1e9,x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;
+    var v=b.map(function(a,i){
+      var l=Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]),r=Math.sin(i*12.9898+o.s*78.233)*43758.5453;r=r-Math.floor(r);var k=.78+.3*r;
+      return [a[0]/l*k*o.d[0]/2,a[1]/l*k*o.d[1]/2,a[2]/l*k*o.d[2]/2];
+    });
+    v.forEach(function(a){mn=Math.min(mn,a[1]);});
+    v.forEach(function(a){a[1]-=mn;mx=Math.max(mx,a[1]);x0=Math.min(x0,a[0]);x1=Math.max(x1,a[0]);z0=Math.min(z0,a[2]);z1=Math.max(z1,a[2]);});
+    o.vs=v;o.hy=mx;o.w=Math.max(x1-x0,z1-z0);
+  }
+  for(var kk in ST)mk(ST[kk]);
+  function cl(x){return Math.max(0,Math.min(1,x));}
+  function fits(k){var o=ST[k];return o.w+0.2<=Math.min(L,W)&&o.hy+0.1<=h;}
+  function pr(i){return cl((performance.now()-ns[i])/1700);}
+  function bump(){var m=0,i,p;for(i=0;i<ns.length;i++){p=pr(i);m=Math.max(m,p<.28?0:p<.45?.25*(p-.28)/.17:.25*(1-(p-.45)/.55));}return m;}
+  function stY(i){var e=cl(pr(i)/.45);return (1-e*e)*(H+1);}
+  function cylV(){var t=0,i;if(!st)return 0;for(i=0;i<ns.length;i++)t+=ST[st].v*cl((pr(i)-.3)/.7);return t;}
+  function flowing(){for(var i=0;i<ns.length;i++){var p=pr(i);if(p>.3&&p<1)return true;}return false;}
+  var lastSt=null,ans=document.getElementById('ans'),ain=document.getElementById('ain'),an2=document.getElementById('aname');
+  var afb=document.getElementById('afb'),ack=document.getElementById('ack');
+  function say(t,k){afb.textContent=t;afb.className=k;}
+  ain.oninput=function(){ain.value=ain.value.replace(/[^0-9.]/g,'');afb.textContent='';};
+  ack.onclick=function(){
+    if(!st)return;
+    var run=false,i;
+    for(i=0;i<ns.length;i++)if(pr(i)<1)run=true;
+    if(run){say('等水流完先再檢查。','');return;}
+    var n=ns.length,v=ST[st].v,tot=n*v,txt=ain.value.trim(),x=parseFloat(txt);
+    if(tot>200){say('量杯已經溢出，量度唔到。請撳「取出」，用少啲石頭再量度。','no');return;}
+    if(txt===''||isNaN(x)){say('請先輸入數字。','no');return;}
+    if(Math.abs(x-v)<1e-6){say('答啱喇！石頭'+st+'嘅體積係 '+v+' cm³。','ok');return;}
+    if(n>1&&Math.abs(x-tot)<1e-6){say('你輸入嘅係 '+n+' 粒石頭嘅總體積。一粒石頭嘅體積係幾多？','no');return;}
+    say('未啱，再睇下量杯水位喺邊兩條刻度之間，每小格係 20 mL。','no');
+  };
+  function mark(){document.querySelectorAll('#p1 .stbtn:not(.stout)').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.s===st?'true':'false');});ans.hidden=!st;afb.textContent='';if(st!==lastSt){ain.value='';lastSt=st;}if(st)an2.textContent=st;}
+  var POS=[[.3,.62],[.7,.62],[.5,.3]];
+  function stone(i){
+    var o=ST[st],y0=stY(i),cx=L*POS[i][0],cz=W*POS[i][1],sc=.8;
+    var pv=o.vs.map(function(a){return P(cx+a[0]*sc,y0+a[1]*sc,cz+a[2]*sc);});
+    var fs=FA.map(function(f,j){return {f:f,i:j,d:(pv[f[0]][2]+pv[f[1]][2]+pv[f[2]][2])/3};}).sort(function(a,b){return b.d-a.d;});
+    ctx.lineWidth=1;ctx.strokeStyle='rgba(0,0,0,.35)';
+    fs.forEach(function(q){
+      ctx.fillStyle='hsl(30,4%,'+(36+(q.i*7)%24)+'%)';ctx.beginPath();
+      q.f.forEach(function(k,j){j?ctx.lineTo(pv[k][0],pv[k][1]):ctx.moveTo(pv[k][0],pv[k][1]);});
+      ctx.closePath();ctx.fill();ctx.stroke();
+    });
+  }
+  function drawStones(late){
+    var idx=[],i;
+    for(i=0;i<ns.length;i++)if((stY(i)>=h)===late)idx.push(i);
+    idx.sort(function(a,b){return P(L*POS[b][0],stY(b)+1,W*POS[b][1])[2]-P(L*POS[a][0],stY(a)+1,W*POS[a][1])[2];});
+    idx.forEach(function(i2){stone(i2);});
+  }
+  function cyl(){
+    var ly=Math.min(cylV(),200)/20*TK,n=28,k,r0=[],r1=[],rl=[];
+    for(k=0;k<n;k++){var a=6.2832*k/n,x=CX+CR*Math.cos(a),z=CZ+CR*Math.sin(a);r0.push([x,0,z]);r1.push([x,CH,z]);rl.push([x,ly,z]);}
+    var ov=cylV()-200;
+    if(ov>0){var R=CR+.5+1.6*cl(ov/250),pd=[];for(k=0;k<n;k++){var a2=6.2832*k/n;pd.push([CX+R*Math.cos(a2),.02,CZ+R*Math.sin(a2)]);}poly(pd,C.aqua,.35);}
+    if(ly>0){for(k=0;k<n;k++)poly([r0[k],r0[(k+1)%n],rl[(k+1)%n],rl[k]],C.aqua,.22);poly(rl,C.aqua,.4);}
+    ctx.strokeStyle=C.mut;ctx.lineWidth=2;
+    [r0,r1].forEach(function(rg){ctx.beginPath();rg.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.stroke();});
+    var c=Math.cos(yaw),s=Math.sin(yaw);
+    ctx.beginPath();seg([CX+CR*c,0,CZ+CR*s],[CX+CR*c,CH,CZ+CR*s]);seg([CX-CR*c,0,CZ-CR*s],[CX-CR*c,CH,CZ-CR*s]);ctx.stroke();
+    if(pit<1.3){
+      ctx.lineWidth=1.5;ctx.fillStyle=C.mut;ctx.font='11px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';
+      for(k=1;k<=10;k++){
+        var y=k*TK,m=k%5===0?.9:.45;
+        ctx.beginPath();seg([CX+(CR-m)*c,y,CZ+(CR-m)*s],[CX+CR*c,y,CZ+CR*s]);ctx.stroke();
+        var lp=P(CX+(CR+.25)*c,y,CZ+(CR+.25)*s);if(k%5===0)ctx.fillText(k*20+' mL',lp[0],lp[1]);
+      }
+    }
+  }
+  function gutter(){
+    var y=h,a=CZ-.3,b2=CZ+.3,c=Math.cos(yaw),s=Math.sin(yaw);
+    poly([[L,y,a],[CX,y,a],[CX,y,b2],[L,y,b2]],C.mut,.25);
+    ctx.strokeStyle=C.mut;ctx.lineWidth=2;ctx.beginPath();seg([L,y,a],[CX,y,a]);seg([L,y,b2],[CX,y,b2]);ctx.stroke();
+    if(flowing()){
+      var tv=cylV(),ly=Math.min(tv,200)/20*TK,off=-performance.now()/22;
+      var paths=[[[L,y,CZ],[CX,y,CZ],[CX,ly,CZ]]];
+      if(tv>200)paths.push([[CX+CR*c,CH,CZ+CR*s],[CX+CR*c*1.05,.02,CZ+CR*s*1.05]]);
+      [[C.aqua,5,.55,[]],[C.ink,2,.9,[5,8]]].forEach(function(l){
+        ctx.strokeStyle=l[0];ctx.lineWidth=l[1];ctx.globalAlpha=l[2];ctx.setLineDash(l[3]);ctx.lineDashOffset=off;
+        ctx.beginPath();
+        paths.forEach(function(pp){pp.forEach(function(q,j){var p=P(q[0],q[1],q[2]);j?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});});
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);ctx.lineDashOffset=0;ctx.globalAlpha=1;
+    }
+  }
+  function note(done){
+    if(!st)return;
+    var t=ns.length*ST[st].v;
+    msg.textContent='水缸入面有 '+ns.length+' 粒石頭'+st+'。'+(done&&t>200?'量杯容量得 200 mL，水已經溢出，量度唔到石頭嘅體積。':'');
+  }
+  function tick(){
+    draw();
+    var run=false,i;
+    for(i=0;i<ns.length;i++)if(pr(i)<1)run=true;
+    if(run)raf=requestAnimationFrame(tick);else{raf=null;if(st)note(true);}
+  }
+  function kick(){if(!raf)raf=requestAnimationFrame(tick);}
+  function clr(m){st=null;ns=[];mark();msg.textContent=m;draw();}
+  function put(k){
+    if(st&&st!==k){msg.textContent='水缸入面已經有石頭'+st+'，要先撳「取出」先可以換石頭。';return;}
+    if(ns.length>=3){msg.textContent='最多只可以放 3 粒石頭。';return;}
+    if(!fits(k)){msg.textContent='石頭'+k+'放唔落：水缸太細或水位太低。';return;}
+    st=k;ns.push(performance.now());mark();note(false);kick();
+  }
+  function chk(h0){
+    if(!st)return;
+    if(h!==h0){clr('水位改變咗，已取出石頭，請重新放入。');return;}
+    if(!fits(st))clr('水缸太細，石頭放唔落，已取出。');
+  }
+  function draw(){
+    if(!cw)return;
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,cw,ch);
+    S=Math.min(cw/21,ch/18)*cam.k;
+    C={aqua:V('--aqua'),mut:V('--mut'),amber:V('--amber'),panel:V('--panel'),ink:V('--ink'),ok:V('--ok')};
+    var i;
+    ctx.globalAlpha=.45;ctx.strokeStyle=C.mut;ctx.lineWidth=1;ctx.beginPath();
+    for(i=0;i<=10;i++){seg([i,0,0],[i,0,10]);seg([0,0,i],[10,0,i]);}
+    ctx.stroke();ctx.globalAlpha=1;
+    cyl();drawStones(false);
+    var b=[[0,0,0],[L,0,0],[L,0,W],[0,0,W]],t=b.map(function(a){return [a[0],H,a[2]];});
+    var hw=h+bump(),wl=b.map(function(a){return [a[0],hw,a[2]];});
+    for(i=0;i<4;i++)poly([b[i],b[(i+1)%4],wl[(i+1)%4],wl[i]],C.aqua,.3);
+    poly(wl,C.aqua,.35);
+    ctx.strokeStyle=C.aqua;ctx.lineWidth=2.5;ctx.beginPath();for(i=0;i<4;i++)seg(wl[i],wl[(i+1)%4]);ctx.stroke();
+    if(show)poly(b,C.amber,.5);
+    for(i=0;i<4;i++)poly([b[i],b[(i+1)%4],t[(i+1)%4],t[i]],C.mut,.04);
+    poly(t,C.mut,.04);
+    ctx.strokeStyle=C.mut;ctx.lineWidth=2;ctx.beginPath();
+    for(i=0;i<4;i++){seg(t[i],t[(i+1)%4]);seg(b[i],t[i]);}
+    ctx.stroke();
+    ctx.strokeStyle=show?C.amber:C.mut;ctx.lineWidth=show?3.5:2;ctx.beginPath();
+    for(i=0;i<4;i++)seg(b[i],b[(i+1)%4]);
+    ctx.stroke();
+    drawStones(true);
+    gutter();
+    ctx.fillStyle=C.mut;ctx.font='11px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    for(i=1;i<=10;i++){var a=P(i,0,-0.7),c=P(-0.7,0,i);ctx.fillText(i,a[0],a[1]);ctx.fillText(i,c[0],c[1]);}
+    pill('長 '+L+' cm',P(L/2,0,-1.9),C.aqua);
+    pill('闊 '+W+' cm',P(-2,0,W/2),C.amber);
+    if(pit<1.3){ctx.fillStyle=C.mut;ctx.font='11px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';for(i=1;i<=H;i++){var r=P(-0.8,i,0);ctx.fillText(i,r[0],r[1]);}}
+    pill('水位 '+h+' cm',P(L+2,h,0),C.ok);
+    
+    if(show)pill('底面積',P(L/2,0,W/2),C.amber);
+  }
+  function resize(){var r=cv.getBoundingClientRect();dpr=window.devicePixelRatio||1;cw=r.width;ch=r.height;cv.width=cw*dpr;cv.height=ch*dpr;draw();}
+  function upd(){
+    var h0=h;L=+rl.value;W=+rw.value;h=+rh.value;ol.textContent=L+' cm';ow.textContent=W+' cm';oh.textContent=h+' cm';chk(h0);
+    ares.textContent=show?'底面積 = 長 × 闊 = '+L+' × '+W+' = '+(L*W)+' cm²':'';
+    ab.textContent=show?'隱藏底面積':'顯示底面積';
+    draw();
+  }
+  rl.oninput=upd;rw.oninput=upd;rh.oninput=upd;
+  document.querySelectorAll('#p1 .stbtn').forEach(function(b){b.onclick=function(){if(b.id==='stout')clr('');else put(b.dataset.s);};});
+  ab.onclick=function(){show=!show;upd();};
+  document.getElementById('vTop').onclick=function(){yaw=0;pit=Math.PI/2;draw();};
+  document.getElementById('v3d').onclick=function(){yaw=-0.5;pit=0.6;draw();};
+  var dr=null;
+  cv.addEventListener('pointerdown',function(e){dr=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);});
+  cv.addEventListener('pointermove',function(e){
+    if(!dr)return;
+    yaw+=(e.clientX-dr[0])*.008;pit=Math.max(.12,Math.min(1.25,pit+(e.clientY-dr[1])*.006));
+    dr=[e.clientX,e.clientY];draw();
+  });
+  ['pointerup','pointercancel'].forEach(function(n){cv.addEventListener(n,function(){dr=null;});});
+  window.addEventListener('resize',resize);
+  if(window.matchMedia)window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+  document.querySelector('.part[data-p="1"]').onclick=function(){hub.hidden=true;p1.hidden=false;main.classList.add('wide');window.scrollTo(0,0);resize();};
+  document.getElementById('back').onclick=function(){p1.hidden=true;hub.hidden=false;main.classList.remove('wide');};
+  var zb=document.getElementById('zoom');
+  var HOME={x:6,y:5,z:5,k:1,yaw:-0.5,pit:0.6},ZOOM={x:CX,y:3.8,z:CZ,k:1.6,yaw:0,pit:0.3};
+  function goTo(t){
+    if(tw)cancelAnimationFrame(tw);
+    var f={x:cam.x,y:cam.y,z:cam.z,k:cam.k,yaw:yaw,pit:pit},t0=performance.now();
+    function ap(e){
+      cam.x=f.x+(t.x-f.x)*e;cam.y=f.y+(t.y-f.y)*e;cam.z=f.z+(t.z-f.z)*e;cam.k=f.k+(t.k-f.k)*e;
+      yaw=f.yaw+(t.yaw-f.yaw)*e;pit=f.pit+(t.pit-f.pit)*e;draw();
+    }
+    if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){ap(1);return;}
+    (function step(now){var p=cl((now-t0)/700);ap(p*p*(3-2*p));if(p<1)tw=requestAnimationFrame(step);})(t0);
+  }
+  function zset(on){zm=on;zb.textContent=on?'返回全景':'量杯';zb.setAttribute('aria-pressed',on?'true':'false');goTo(on?ZOOM:HOME);}
+  zb.onclick=function(){zset(!zm);};
+  var bk=document.getElementById('back'),ob=bk.onclick;
+  bk.onclick=function(){
+    if(tw)cancelAnimationFrame(tw);
+    zm=false;zb.textContent='量杯';zb.setAttribute('aria-pressed','false');
+    cam.x=6;cam.y=5;cam.z=5;cam.k=1;yaw=-0.5;pit=0.6;ob();
+  };
+})();
+</script>
+<script>
+(function(){
+  var hub=document.getElementById('hub'),p2=document.getElementById('p2'),main=document.querySelector('main');
+  var cv=document.getElementById('cv2'),ctx=cv.getContext('2d');
+  var msg=document.getElementById('m2'),ans=document.getElementById('a2'),ain=document.getElementById('i2'),an2=document.getElementById('n2'),afb=document.getElementById('f2'),ack=document.getElementById('k2');
+  var yaw=.35,pit=.22,dpr=1,S=20,cw=0,ch=0,C={},st=null,ns=[],raf=null,lastSt=null;
+  var R=2.2,HT=10,BASE=300,CAP=1000;
+  var ST={A:{v:100,d:[1.7,1.5,1.6],s:1},B:{v:150,d:[2.1,1.8,2],s:2},C:{v:250,d:[2.6,2.2,2.5],s:3}};
+  var OX=[0,.3,-.25],OZ=[0,.2,.25];
+  var FA=[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],[3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]];
+  function mk(o){
+    var t=(1+Math.sqrt(5))/2,b=[[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],[t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]],mn=1e9,mx=-1e9;
+    var v=b.map(function(a,i){
+      var l=Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]),r=Math.sin(i*12.9898+o.s*78.233)*43758.5453;r=r-Math.floor(r);var k=.78+.3*r;
+      return [a[0]/l*k*o.d[0]/2,a[1]/l*k*o.d[1]/2,a[2]/l*k*o.d[2]/2];
+    });
+    v.forEach(function(a){mn=Math.min(mn,a[1]);});
+    v.forEach(function(a){a[1]-=mn;mx=Math.max(mx,a[1]);});
+    o.vs=v;o.hy=mx;
+  }
+  for(var kk in ST)mk(ST[kk]);
+  function V(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function cl(x){return Math.max(0,Math.min(1,x));}
+  function P(x,y,z){
+    y-=5.2;
+    var c=Math.cos(yaw),s=Math.sin(yaw),X=x*c+z*s,Z=-x*s+z*c;
+    var Y=y*Math.cos(pit)+Z*Math.sin(pit);
+    return [cw/2+S*X,ch/2-S*Y,Z*Math.cos(pit)-y*Math.sin(pit)];
+  }
+  function seg(a,b){var p=P(a[0],a[1],a[2]),q=P(b[0],b[1],b[2]);ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);}
+  function poly(pts,col,al){ctx.globalAlpha=al;ctx.fillStyle=col;ctx.beginPath();pts.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.fill();ctx.globalAlpha=1;}
+  function pr(i){return cl((performance.now()-ns[i])/1700);}
+  function rest(i){var y=0,j;for(j=0;j<i;j++)y+=ST[st].hy*.8;return y;}
+  function stY(i){var e=cl(pr(i)/.45),r=rest(i);return r+(1-e*e)*(HT+2-r);}
+  function vol(){var t=BASE,i;if(st)for(i=0;i<ns.length;i++)t+=ST[st].v*cl((pr(i)-.3)/.7);return t;}
+  function flowing(){for(var i=0;i<ns.length;i++){var p=pr(i);if(p>.3&&p<1)return true;}return false;}
+  function stone(i){
+    var o=ST[st],y0=stY(i),cx=OX[i],cz=OZ[i];
+    var pv=o.vs.map(function(a){return P(cx+a[0],y0+a[1],cz+a[2]);});
+    var fs=FA.map(function(f,j){return {f:f,i:j,d:(pv[f[0]][2]+pv[f[1]][2]+pv[f[2]][2])/3};}).sort(function(a,b){return b.d-a.d;});
+    ctx.lineWidth=1;ctx.strokeStyle='rgba(0,0,0,.35)';
+    fs.forEach(function(q){
+      ctx.fillStyle='hsl(30,4%,'+(36+(q.i*7)%24)+'%)';ctx.beginPath();
+      q.f.forEach(function(k,j){j?ctx.lineTo(pv[k][0],pv[k][1]):ctx.moveTo(pv[k][0],pv[k][1]);});
+      ctx.closePath();ctx.fill();ctx.stroke();
+    });
+  }
+  function drawStones(late){
+    var ly=Math.min(vol(),CAP)/100,idx=[],i;
+    for(i=0;i<ns.length;i++)if((stY(i)>=ly)===late)idx.push(i);
+    idx.sort(function(a,b){return P(OX[b],stY(b)+.8,OZ[b])[2]-P(OX[a],stY(a)+.8,OZ[a])[2];});
+    idx.forEach(function(i2){stone(i2);});
+  }
+  function ring(y,r){var a=[],k,n=32;for(k=0;k<n;k++){var q=6.2832*k/n;a.push([r*Math.cos(q),y,r*Math.sin(q)]);}return a;}
+  function water(){
+    var v=vol(),ly=Math.min(v,CAP)/100,r0=ring(0,R),rl=ring(ly,R),n=r0.length,k;
+    for(k=0;k<n;k++)poly([r0[k],r0[(k+1)%n],rl[(k+1)%n],rl[k]],C.aqua,.22);
+    poly(rl,C.aqua,.4);
+  }
+  function glass(){
+    var c=Math.cos(yaw),s=Math.sin(yaw),k;
+    ctx.strokeStyle=C.mut;ctx.lineWidth=2;
+    [ring(0,R),ring(HT,R)].forEach(function(rg){ctx.beginPath();rg.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.stroke();});
+    ctx.beginPath();seg([R*c,0,R*s],[R*c,HT,R*s]);seg([-R*c,0,-R*s],[-R*c,HT,-R*s]);ctx.stroke();
+    if(pit<1.3){
+      ctx.lineWidth=1.5;ctx.fillStyle=C.mut;ctx.font='12px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';
+      for(k=1;k<=10;k++){
+        var m=k%5===0?1:.5;
+        ctx.beginPath();seg([(R-m)*c,k,(R-m)*s],[R*c,k,R*s]);ctx.stroke();
+        if(k%5===0){var lp=P((R+.25)*c,k,(R+.25)*s);ctx.fillText(k*100+' mL',lp[0],lp[1]);}
+      }
+    }
+  }
+  function overflow(){
+    var ov=vol()-CAP,c=Math.cos(yaw),s=Math.sin(yaw),k,pd=[];
+    if(ov<=0)return;
+    var Rp=R+.4+1.6*cl(ov/200);
+    for(k=0;k<32;k++){var q=6.2832*k/32;pd.push([Rp*Math.cos(q),.02,Rp*Math.sin(q)]);}
+    poly(pd,C.aqua,.35);
+    if(flowing()){
+      var off=-performance.now()/22;
+      [[C.aqua,5,.55,[]],[C.ink,2,.9,[5,8]]].forEach(function(l){
+        ctx.strokeStyle=l[0];ctx.lineWidth=l[1];ctx.globalAlpha=l[2];ctx.setLineDash(l[3]);ctx.lineDashOffset=off;
+        ctx.beginPath();seg([R*c,HT,R*s],[R*c*1.05,.02,R*s*1.05]);ctx.stroke();
+      });
+      ctx.setLineDash([]);ctx.lineDashOffset=0;ctx.globalAlpha=1;
+    }
+  }
+  function draw(){
+    if(!cw)return;
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,cw,ch);
+    S=Math.min(cw/10,ch/13);
+    C={aqua:V('--aqua'),mut:V('--mut'),ink:V('--ink')};
+    var i;
+    ctx.globalAlpha=.35;ctx.strokeStyle=C.mut;ctx.lineWidth=1;ctx.beginPath();
+    for(i=-4;i<=4;i++){seg([i,0,-4],[i,0,4]);seg([-4,0,i],[4,0,i]);}
+    ctx.stroke();ctx.globalAlpha=1;
+    drawStones(false);water();glass();drawStones(true);overflow();
+  }
+  function resize(){var r=cv.getBoundingClientRect();dpr=window.devicePixelRatio||1;cw=r.width;ch=r.height;cv.width=cw*dpr;cv.height=ch*dpr;draw();}
+  function mark(){
+    document.querySelectorAll('#p2 .stbtn:not(.stout)').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.s===st?'true':'false');});
+    ans.hidden=!st;afb.textContent='';
+    if(st!==lastSt){ain.value='';lastSt=st;}
+    if(st)an2.textContent=st;
+  }
+  function note(done){
+    if(!st)return;
+    var t=BASE+ns.length*ST[st].v;
+    msg.textContent='量杯入面有 '+ns.length+' 粒石頭'+st+'。'+(done&&t>CAP?'量杯容量得 1000 mL（1 L），水已經溢出，量度唔到石頭嘅體積。':'');
+  }
+  function tick(){
+    draw();
+    var run=false,i;
+    for(i=0;i<ns.length;i++)if(pr(i)<1)run=true;
+    if(run)raf=requestAnimationFrame(tick);else{raf=null;if(st)note(true);}
+  }
+  function kick(){if(!raf)raf=requestAnimationFrame(tick);}
+  function clr(m){st=null;ns=[];mark();msg.textContent=m;draw();}
+  function put(k){
+    if(st&&st!==k){msg.textContent='量杯入面已經有石頭'+st+'，要先撳「取出」先可以換石頭。';return;}
+    if(ns.length>=3){msg.textContent='最多只可以放 3 粒石頭。';return;}
+    st=k;ns.push(performance.now());mark();note(false);kick();
+  }
+  function say(t,k){afb.textContent=t;afb.className=k;}
+  ain.oninput=function(){ain.value=ain.value.replace(/[^0-9.]/g,'');afb.textContent='';};
+  ack.onclick=function(){
+    if(!st)return;
+    var run=false,i;
+    for(i=0;i<ns.length;i++)if(pr(i)<1)run=true;
+    if(run){say('等水位升完先再檢查。','');return;}
+    var n=ns.length,v=ST[st].v,tot=BASE+n*v,txt=ain.value.trim(),x=parseFloat(txt);
+    if(tot>CAP){say('量杯已經溢出，量度唔到。請撳「取出」，用少啲石頭再量度。','no');return;}
+    if(txt===''||isNaN(x)){say('請先輸入數字。','no');return;}
+    if(Math.abs(x-v)<1e-6){say('答啱喇！石頭'+st+'嘅體積係 '+v+' cm³。','ok');return;}
+    if(Math.abs(x-tot)<1e-6){say('你輸入嘅係放石頭後嘅水位讀數。石頭嘅體積要用放石頭後嘅讀數減去放石頭前嘅讀數（多粒就再除以粒數）。','no');return;}
+    if(n>1&&Math.abs(x-n*v)<1e-6){say('你輸入嘅係 '+n+' 粒石頭嘅總體積。一粒石頭嘅體積係幾多？','no');return;}
+    say('未啱，再睇下放石頭前後嘅水位，每小格係 100 mL。','no');
+  };
+  var oi=document.getElementById('i2o'),fo=document.getElementById('f2o'),ko=document.getElementById('k2o');
+  function say2(t,k){fo.textContent=t;fo.className=k;}
+  oi.oninput=function(){oi.value=oi.value.replace(/[^0-9.]/g,'');fo.textContent='';};
+  ko.onclick=function(){
+    var txt=oi.value.trim(),x=parseFloat(txt);
+    if(txt===''||isNaN(x)){say2('請先輸入數字。','no');return;}
+    if(Math.abs(x-BASE)<1e-6){say2('答啱喇！量杯入面原有 '+BASE+' mL 水。','ok');return;}
+    if(Math.abs(x-BASE/100)<1e-6){say2('你數到 '+x+' 小格，每小格係 100 mL，即係幾多 mL？','no');return;}
+    say2('未啱，再睇下水面喺邊條刻度，每小格係 100 mL。','no');
+  };
+  document.querySelectorAll('#p2 .stbtn').forEach(function(b){b.onclick=function(){if(b.id==='out2')clr('');else put(b.dataset.s);};});
+  var dr=null;
+  cv.addEventListener('pointerdown',function(e){dr=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);});
+  cv.addEventListener('pointermove',function(e){
+    if(!dr)return;
+    yaw+=(e.clientX-dr[0])*.008;pit=Math.max(.1,Math.min(1.25,pit+(e.clientY-dr[1])*.006));
+    dr=[e.clientX,e.clientY];draw();
+  });
+  ['pointerup','pointercancel'].forEach(function(n){cv.addEventListener(n,function(){dr=null;});});
+  window.addEventListener('resize',resize);
+  if(window.matchMedia)window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+  document.querySelector('.part[data-p="2"]').onclick=function(){hub.hidden=true;p2.hidden=false;main.classList.add('wide');window.scrollTo(0,0);resize();};
+  document.getElementById('back2').onclick=function(){p2.hidden=true;hub.hidden=false;main.classList.remove('wide');};
+})();
+</script>
+<script>
+(function(){
+  var hub=document.getElementById('hub'),p3=document.getElementById('p3'),main=document.querySelector('main');
+  var cv=document.getElementById('cv3'),ctx=cv.getContext('2d');
+  var msg=document.getElementById('m3'),ans=document.getElementById('a3'),ain=document.getElementById('i3'),an2=document.getElementById('n3'),afb=document.getElementById('f3'),ack=document.getElementById('k3');
+  var yaw=-.3,pit=.35,dpr=1,S=10,cw=0,ch=0,C={},st=null,ns=[],raf=null,lastSt=null;
+  var RC=11,CHT=20,WL=17,TX0=15,TL=16,TW=10,TH=15,GX=19,BA=TL*TW,CAP=BA*TH;
+  var ST={A:{v:320,d:[8.5,7.5,8.5],s:1},B:{v:800,d:[11.5,10,11.5],s:2},C:{v:1200,d:[13.5,11.5,13],s:3}};
+  var POS=[[-4.5,-3],[4.5,-2.5],[0,4.5]];
+  var FA=[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],[3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]];
+  function mk(o){
+    var t=(1+Math.sqrt(5))/2,b=[[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],[t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]],mn=1e9;
+    var v=b.map(function(a,i){
+      var l=Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]),r=Math.sin(i*12.9898+o.s*78.233)*43758.5453;r=r-Math.floor(r);var k=.78+.3*r;
+      return [a[0]/l*k*o.d[0]/2,a[1]/l*k*o.d[1]/2,a[2]/l*k*o.d[2]/2];
+    });
+    v.forEach(function(a){mn=Math.min(mn,a[1]);});
+    v.forEach(function(a){a[1]-=mn;});
+    o.vs=v;
+  }
+  for(var kk in ST)mk(ST[kk]);
+  function V(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function cl(x){return Math.max(0,Math.min(1,x));}
+  function fmt(x){return String(Math.round(x*10)/10);}
+  function P(x,y,z){
+    x-=13;y-=9;
+    var c=Math.cos(yaw),s=Math.sin(yaw),X=x*c+z*s,Z=-x*s+z*c;
+    var Y=y*Math.cos(pit)+Z*Math.sin(pit);
+    return [cw/2+S*X,ch/2-S*Y,Z*Math.cos(pit)-y*Math.sin(pit)];
+  }
+  function seg(a,b){var p=P(a[0],a[1],a[2]),q=P(b[0],b[1],b[2]);ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);}
+  function poly(pts,col,al){ctx.globalAlpha=al;ctx.fillStyle=col;ctx.beginPath();pts.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.fill();ctx.globalAlpha=1;}
+  function pill(t,p,col){
+    ctx.font='700 13px "Noto Sans TC",system-ui,sans-serif';
+    var w=ctx.measureText(t).width+16,h=24,x=p[0]-w/2,y=p[1]-h/2;
+    ctx.fillStyle=C.panel;ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();
+    if(ctx.roundRect)ctx.roundRect(x,y,w,h,8);else ctx.rect(x,y,w,h);
+    ctx.fill();ctx.stroke();
+    ctx.fillStyle=C.ink;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t,p[0],p[1]+1);
+  }
+  function pr(i){return cl((performance.now()-ns[i])/1700);}
+  function stY(i){var e=cl(pr(i)/.45);return (1-e*e)*32;}
+  function vt(){var t=0,i;if(st)for(i=0;i<ns.length;i++)t+=ST[st].v*cl((pr(i)-.3)/.7);return t;}
+  function flowing(){for(var i=0;i<ns.length;i++){var p=pr(i);if(p>.3&&p<1)return true;}return false;}
+  function bump(){var m=0,i,p;for(i=0;i<ns.length;i++){p=pr(i);m=Math.max(m,p<.3?0:p<.45?.6*(p-.3)/.15:.6*(1-(p-.45)/.55));}return m;}
+  function stone(i){
+    var o=ST[st],y0=stY(i),cx=POS[i][0],cz=POS[i][1],sc=.8;
+    var pv=o.vs.map(function(a){return P(cx+a[0]*sc,y0+a[1]*sc,cz+a[2]*sc);});
+    var fs=FA.map(function(f,j){return {f:f,i:j,d:(pv[f[0]][2]+pv[f[1]][2]+pv[f[2]][2])/3};}).sort(function(a,b){return b.d-a.d;});
+    ctx.lineWidth=1;ctx.strokeStyle='rgba(0,0,0,.35)';
+    fs.forEach(function(q){
+      ctx.fillStyle='hsl(30,4%,'+(36+(q.i*7)%24)+'%)';ctx.beginPath();
+      q.f.forEach(function(k,j){j?ctx.lineTo(pv[k][0],pv[k][1]):ctx.moveTo(pv[k][0],pv[k][1]);});
+      ctx.closePath();ctx.fill();ctx.stroke();
+    });
+  }
+  function drawStones(late){
+    var idx=[],i;
+    for(i=0;i<ns.length;i++)if((stY(i)>=WL)===late)idx.push(i);
+    idx.sort(function(a,b){return P(POS[b][0],stY(b)+4,POS[b][1])[2]-P(POS[a][0],stY(a)+4,POS[a][1])[2];});
+    idx.forEach(function(i2){stone(i2);});
+  }
+  function ring(y,r){var a=[],k,n=36;for(k=0;k<n;k++){var q=6.2832*k/n;a.push([r*Math.cos(q),y,r*Math.sin(q)]);}return a;}
+  function canWater(){
+    var ly=WL+bump(),r0=ring(0,RC),rl=ring(ly,RC),n=r0.length,k;
+    for(k=0;k<n;k++)poly([r0[k],r0[(k+1)%n],rl[(k+1)%n],rl[k]],C.aqua,.22);
+    poly(rl,C.aqua,.4);
+  }
+  function canGlass(){
+    var c=Math.cos(yaw),s=Math.sin(yaw);
+    ctx.strokeStyle=C.mut;ctx.lineWidth=2;
+    [ring(0,RC),ring(CHT,RC)].forEach(function(rg){ctx.beginPath();rg.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.stroke();});
+    ctx.beginPath();seg([RC*c,0,RC*s],[RC*c,CHT,RC*s]);seg([-RC*c,0,-RC*s],[-RC*c,CHT,-RC*s]);ctx.stroke();
+  }
+  var TB=[[TX0,0,-TW/2],[TX0+TL,0,-TW/2],[TX0+TL,0,TW/2],[TX0,0,TW/2]];
+  function tankWater(hh){
+    if(hh<=0)return;
+    var w=TB.map(function(a){return [a[0],hh,a[2]];}),i;
+    for(i=0;i<4;i++)poly([TB[i],TB[(i+1)%4],w[(i+1)%4],w[i]],C.aqua,.3);
+    poly(w,C.aqua,.35);
+    ctx.strokeStyle=C.aqua;ctx.lineWidth=2.5;ctx.beginPath();for(i=0;i<4;i++)seg(w[i],w[(i+1)%4]);ctx.stroke();
+  }
+  function tankGlass(){
+    var t=TB.map(function(a){return [a[0],TH,a[2]];}),i;
+    for(i=0;i<4;i++)poly([TB[i],TB[(i+1)%4],t[(i+1)%4],t[i]],C.mut,.04);
+    poly(t,C.mut,.04);
+    ctx.strokeStyle=C.mut;ctx.lineWidth=2;ctx.beginPath();
+    for(i=0;i<4;i++){seg(TB[i],TB[(i+1)%4]);seg(t[i],t[(i+1)%4]);seg(TB[i],t[i]);}
+    ctx.stroke();
+  }
+  function streams(hh){
+    var off=-performance.now()/22,ov=vt()-CAP,fl=flowing();
+    poly([[RC,WL,-.8],[GX,WL,-.8],[GX,WL,.8],[RC,WL,.8]],C.mut,.25);
+    ctx.strokeStyle=C.mut;ctx.lineWidth=2;ctx.beginPath();seg([RC,WL,-.8],[GX,WL,-.8]);seg([RC,WL,.8],[GX,WL,.8]);ctx.stroke();
+    if(!fl)return;
+    var paths=[[[RC,WL,0],[GX,WL,0],[GX,hh,0]]];
+    if(ov>0)paths.push([[TX0+TL,TH,-TW/2],[TX0+TL+.4,.02,-TW/2-.4]]);
+    [[C.aqua,5,.55,[]],[C.ink,2,.9,[5,8]]].forEach(function(l){
+      ctx.strokeStyle=l[0];ctx.lineWidth=l[1];ctx.globalAlpha=l[2];ctx.setLineDash(l[3]);ctx.lineDashOffset=off;
+      ctx.beginPath();
+      paths.forEach(function(pp){pp.forEach(function(q,j){var p=P(q[0],q[1],q[2]);j?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});});
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);ctx.lineDashOffset=0;ctx.globalAlpha=1;
+  }
+  function arrow(a,b,col){
+    var p=P(a[0],a[1],a[2]),q=P(b[0],b[1],b[2]),dx=q[0]-p[0],dy=q[1]-p[1],L=Math.sqrt(dx*dx+dy*dy);
+    ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=3;
+    ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);ctx.stroke();
+    if(L<16)return;
+    var ux=dx/L,uy=dy/L,nx=-uy,ny=ux,hl=11,hw=5;
+    [[q,1],[p,-1]].forEach(function(e){
+      var t=e[0],d=e[1];
+      ctx.beginPath();ctx.moveTo(t[0],t[1]);
+      ctx.lineTo(t[0]-d*ux*hl+nx*hw,t[1]-d*uy*hl+ny*hw);
+      ctx.lineTo(t[0]-d*ux*hl-nx*hw,t[1]-d*uy*hl-ny*hw);
+      ctx.closePath();ctx.fill();
+    });
+  }
+  function draw(){
+    if(!cw)return;
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,cw,ch);
+    S=Math.min(cw/52,ch/32);
+    C={aqua:V('--aqua'),mut:V('--mut'),ink:V('--ink'),ok:V('--ok'),amber:V('--amber'),panel:V('--panel')};
+    var i,v=vt(),hh=Math.min(v,CAP)/BA,ov=v-CAP;
+    ctx.globalAlpha=.3;ctx.strokeStyle=C.mut;ctx.lineWidth=1;ctx.beginPath();
+    for(i=-15;i<=35;i+=5)seg([i,0,-15],[i,0,15]);
+    for(i=-15;i<=15;i+=5)seg([-15,0,i],[35,0,i]);
+    ctx.stroke();ctx.globalAlpha=1;
+    if(ov>0){var m=1+4*cl(ov/1200);poly([[TX0-m,.02,-TW/2-m],[TX0+TL+m,.02,-TW/2-m],[TX0+TL+m,.02,TW/2+m],[TX0-m,.02,TW/2+m]],C.aqua,.35);}
+    drawStones(false);
+    canWater();tankWater(hh);
+    canGlass();tankGlass();
+    drawStones(true);
+    streams(hh);
+    if(hh>0.05){
+      var xa=TX0-1.6;
+      ctx.strokeStyle=C.ok;ctx.lineWidth=3;ctx.beginPath();seg([TX0,hh,-TW/2],[TX0+TL,hh,-TW/2]);ctx.stroke();
+      ctx.lineWidth=1.5;ctx.beginPath();seg([xa-.4,0,-TW/2],[TX0,0,-TW/2]);seg([xa-.4,hh,-TW/2],[TX0,hh,-TW/2]);ctx.stroke();
+      arrow([xa,0,-TW/2],[xa,hh,-TW/2],C.ok);
+      pill('水位 '+fmt(hh)+' cm',P(TX0+TL/2,hh,-TW/2),C.ok);
+    }
+    pill('長 '+TL+' cm',P(TX0+TL/2,0,-TW/2-3.5),C.aqua);
+    pill('闊 '+TW+' cm',P(TX0+TL+4,0,0),C.amber);
+    pill('高 '+TH+' cm',P(TX0+TL+4,TH/2,-TW/2),C.mut);
+  }
+  function resize(){var r=cv.getBoundingClientRect();dpr=window.devicePixelRatio||1;cw=r.width;ch=r.height;cv.width=cw*dpr;cv.height=ch*dpr;draw();}
+  function mark(){
+    document.querySelectorAll('#p3 .stbtn:not(.stout)').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.s===st?'true':'false');});
+    ans.hidden=!st;afb.textContent='';
+    if(st!==lastSt){ain.value='';lastSt=st;}
+    if(st)an2.textContent=st;
+  }
+  function note(done){
+    if(!st)return;
+    var t=ns.length*ST[st].v;
+    msg.textContent='溢水杯入面有 '+ns.length+' 粒石頭'+st+'。'+(done&&t>CAP?'長方體水缸已經滿晒，水溢出咗，量度唔到石頭嘅體積。':'');
+  }
+  function tick(){
+    draw();
+    var run=false,i;
+    for(i=0;i<ns.length;i++)if(pr(i)<1)run=true;
+    if(run)raf=requestAnimationFrame(tick);else{raf=null;if(st)note(true);}
+  }
+  function kick(){if(!raf)raf=requestAnimationFrame(tick);}
+  function clr(m){st=null;ns=[];mark();msg.textContent=m;draw();}
+  function put(k){
+    if(st&&st!==k){msg.textContent='溢水杯入面已經有石頭'+st+'，要先撳「取出」先可以換石頭。';return;}
+    if(ns.length>=3){msg.textContent='最多只可以放 3 粒石頭。';return;}
+    st=k;ns.push(performance.now());mark();note(false);kick();
+  }
+  function say(t,k){afb.textContent=t;afb.className=k;}
+  ain.oninput=function(){ain.value=ain.value.replace(/[^0-9.]/g,'');afb.textContent='';};
+  ack.onclick=function(){
+    if(!st)return;
+    var run=false,i;
+    for(i=0;i<ns.length;i++)if(pr(i)<1)run=true;
+    if(run){say('等水流完先再檢查。','');return;}
+    var n=ns.length,v=ST[st].v,tot=n*v,txt=ain.value.trim(),x=parseFloat(txt);
+    if(tot>CAP){say('水缸已經滿晒，量度唔到。請撳「取出」，用少啲石頭再量度。','no');return;}
+    if(txt===''||isNaN(x)){say('請先輸入數字。','no');return;}
+    if(Math.abs(x-v)<1e-6){say('答啱喇！石頭'+st+'嘅體積係 '+v+' cm³。','ok');return;}
+    if(Math.abs(x-tot/BA)<.051){say('你輸入嘅係水位的高。排出嘅水嘅體積 = 長 × 闊 × 水位的高。','no');return;}
+    if(n>1&&Math.abs(x-tot)<1e-6){say('你輸入嘅係 '+n+' 粒石頭嘅總體積。一粒石頭嘅體積係幾多？','no');return;}
+    say('未啱，再試下：排出嘅水嘅體積 = 長 × 闊 × 水位的高。如果放咗多過一粒石頭，仲要除以粒數。','no');
+  };
+  document.querySelectorAll('#p3 .stbtn').forEach(function(b){b.onclick=function(){if(b.id==='out3')clr('');else put(b.dataset.s);};});
+  var dr=null;
+  cv.addEventListener('pointerdown',function(e){dr=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);});
+  cv.addEventListener('pointermove',function(e){
+    if(!dr)return;
+    yaw+=(e.clientX-dr[0])*.008;pit=Math.max(.1,Math.min(1.25,pit+(e.clientY-dr[1])*.006));
+    dr=[e.clientX,e.clientY];draw();
+  });
+  ['pointerup','pointercancel'].forEach(function(n){cv.addEventListener(n,function(){dr=null;});});
+  window.addEventListener('resize',resize);
+  if(window.matchMedia)window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+  document.querySelector('.part[data-p="3"]').onclick=function(){hub.hidden=true;p3.hidden=false;main.classList.add('wide');window.scrollTo(0,0);resize();};
+  document.getElementById('back3').onclick=function(){p3.hidden=true;hub.hidden=false;main.classList.remove('wide');};
+})();
+</script>
+<script>
+(function(){
+  var hub=document.getElementById('hub'),p4=document.getElementById('p4'),main=document.querySelector('main');
+  var cv=document.getElementById('cv4'),ctx=cv.getContext('2d');
+  var rl=document.getElementById('rl4'),rw=document.getElementById('rw4'),ol=document.getElementById('ol4'),ow=document.getElementById('ow4'),ar=document.getElementById('ar4'),tg=document.getElementById('tg4');
+  var L=5,W=5,HH=10,H0=4,VS=20,show=false,s=0,an=null,raf=null,placed=false;
+  var ain=document.getElementById('i4'),fb=document.getElementById('f4'),ack=document.getElementById('k4');
+  var yaw=-.5,pit=.6,dpr=1,S=10,cw=0,ch=0,C={};
+  var FA=[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],[3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]];
+  var rock=(function(){
+    var t=(1+Math.sqrt(5))/2,b=[[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],[t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]],mn=1e9,d=[3.4,2.8,3.2];
+    var v=b.map(function(a,i){
+      var l=Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]),r=Math.sin(i*12.9898+78.233)*43758.5453;r=r-Math.floor(r);var k=.78+.3*r;
+      return [a[0]/l*k*d[0]/2,a[1]/l*k*d[1]/2,a[2]/l*k*d[2]/2];
+    });
+    v.forEach(function(a){mn=Math.min(mn,a[1]);});
+    v.forEach(function(a){a[1]-=mn;});
+    return v;
+  })();
+  function V(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function cl(x){return Math.max(0,Math.min(1,x));}
+  function P(x,y,z){
+    x-=5;z-=5;y-=5.5;
+    var c=Math.cos(yaw),sn=Math.sin(yaw),X=x*c+z*sn,Z=-x*sn+z*c;
+    var Y=y*Math.cos(pit)+Z*Math.sin(pit);
+    return [cw/2+S*X,ch/2-S*Y,Z*Math.cos(pit)-y*Math.sin(pit)];
+  }
+  function seg(a,b){var p=P(a[0],a[1],a[2]),q=P(b[0],b[1],b[2]);ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);}
+  function poly(pts,col,al){ctx.globalAlpha=al;ctx.fillStyle=col;ctx.beginPath();pts.forEach(function(a,i){var p=P(a[0],a[1],a[2]);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});ctx.closePath();ctx.fill();ctx.globalAlpha=1;}
+  function pill(t,p,col){
+    ctx.font='700 13px "Noto Sans TC",system-ui,sans-serif';
+    var w=ctx.measureText(t).width+16,h=24,x=p[0]-w/2,y=p[1]-h/2;
+    ctx.fillStyle=C.panel;ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();
+    if(ctx.roundRect)ctx.roundRect(x,y,w,h,8);else ctx.rect(x,y,w,h);
+    ctx.fill();ctx.stroke();
+    ctx.fillStyle=C.ink;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t,p[0],p[1]+1);
+  }
+  function lvl(){return H0+VS/(L*W)*cl((s-.3)/.7);}
+  function stY(){var e=cl(s/.45);return (1-e*e)*13;}
+  function stone(){
+    var y0=stY(),cx=L/2,cz=W/2;
+    var pv=rock.map(function(a){return P(cx+a[0],y0+a[1],cz+a[2]);});
+    var fs=FA.map(function(f,j){return {f:f,i:j,d:(pv[f[0]][2]+pv[f[1]][2]+pv[f[2]][2])/3};}).sort(function(a,b){return b.d-a.d;});
+    ctx.lineWidth=1;ctx.strokeStyle='rgba(0,0,0,.35)';
+    fs.forEach(function(q){
+      ctx.fillStyle='hsl(30,4%,'+(36+(q.i*7)%24)+'%)';ctx.beginPath();
+      q.f.forEach(function(k,j){j?ctx.lineTo(pv[k][0],pv[k][1]):ctx.moveTo(pv[k][0],pv[k][1]);});
+      ctx.closePath();ctx.fill();ctx.stroke();
+    });
+  }
+  function draw(){
+    if(!cw)return;
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,cw,ch);
+    S=Math.min(cw/18,ch/22);
+    C={aqua:V('--aqua'),mut:V('--mut'),amber:V('--amber'),panel:V('--panel'),ink:V('--ink'),ok:V('--ok')};
+    var i,hw=lvl(),b=[[0,0,0],[L,0,0],[L,0,W],[0,0,W]],t=b.map(function(a){return [a[0],HH,a[2]];});
+    ctx.globalAlpha=.45;ctx.strokeStyle=C.mut;ctx.lineWidth=1;ctx.beginPath();
+    for(i=0;i<=10;i++){seg([i,0,0],[i,0,10]);seg([0,0,i],[10,0,i]);}
+    ctx.stroke();ctx.globalAlpha=1;
+    ctx.fillStyle=C.mut;ctx.font='11px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    
+    if(show)poly(b,C.amber,.5);
+    var late=stY()>=hw;
+    if(!late)stone();
+    var w=b.map(function(q){return [q[0],hw,q[2]];}),w0=b.map(function(q){return [q[0],H0,q[2]];});
+    for(i=0;i<4;i++)poly([b[i],b[(i+1)%4],w[(i+1)%4],w[i]],C.aqua,.3);
+    for(i=0;i<4;i++)poly([w0[i],w0[(i+1)%4],w[(i+1)%4],w[i]],C.ok,.55);
+    var rs=hw>H0+.02;
+    poly(w,rs?C.ok:C.aqua,rs?.45:.35);
+    ctx.strokeStyle=rs?C.ok:C.aqua;ctx.lineWidth=2.5;ctx.beginPath();for(i=0;i<4;i++)seg(w[i],w[(i+1)%4]);ctx.stroke();
+    for(i=0;i<4;i++)poly([b[i],b[(i+1)%4],t[(i+1)%4],t[i]],C.mut,.04);
+    poly(t,C.mut,.04);
+    ctx.strokeStyle=C.mut;ctx.lineWidth=2;ctx.beginPath();
+    for(i=0;i<4;i++){seg(t[i],t[(i+1)%4]);seg(b[i],t[i]);}
+    ctx.stroke();
+    ctx.strokeStyle=show?C.amber:C.mut;ctx.lineWidth=show?3.5:2;ctx.beginPath();
+    for(i=0;i<4;i++)seg(b[i],b[(i+1)%4]);
+    ctx.stroke();
+    if(late)stone();
+    if(hw>H0+.02){ctx.strokeStyle=C.ok;ctx.lineWidth=2;ctx.setLineDash([6,5]);ctx.beginPath();seg([0,H0,0],[L,H0,0]);ctx.stroke();ctx.setLineDash([]);}
+    if(pit<1.3){
+      ctx.fillStyle=C.mut;ctx.font='11px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=1.5;ctx.strokeStyle=C.mut;
+      for(i=1;i<=HH;i++){
+        ctx.beginPath();seg([-.5,i,0],[0,i,0]);ctx.stroke();
+        var lp=P(-1.3,i,0);ctx.fillText(i,lp[0],lp[1]);
+      }
+    }
+    pill('長 '+L+' cm',P(L/2,0,-1.9),C.aqua);
+    pill('闊 '+W+' cm',P(-2.4,0,W/2),C.amber);
+    pill('高 '+HH+' cm',P(L+2.4,HH/2,0),C.mut);
+    if(show)pill('底面積',P(L/2,0,W/2),C.amber);
+  }
+  function resize(){var r=cv.getBoundingClientRect();dpr=window.devicePixelRatio||1;cw=r.width;ch=r.height;cv.width=cw*dpr;cv.height=ch*dpr;draw();}
+  function tick(now){
+    if(!an){raf=null;return;}
+    var p=an.dur>0?cl((now-an.t0)/an.dur):1;
+    s=an.from+(an.to-an.from)*p;draw();
+    if(p<1)raf=requestAnimationFrame(tick);else{s=an.to;an=null;raf=null;draw();}
+  }
+  function go(to){
+    var from=s;
+    an={from:from,to:to,t0:performance.now(),dur:1700*Math.abs(to-from)};
+    if(!raf)raf=requestAnimationFrame(tick);
+  }
+  function upd(){
+    L=+rl.value;W=+rw.value;ol.textContent=L+' cm';ow.textContent=W+' cm';ain.value='';fb.textContent='';
+    ar.textContent=show?'底面積: '+(L*W)+' cm²':'顯示底面積';
+    draw();
+  }
+  function say(t,k){fb.textContent=t;fb.className=k;}
+  ain.oninput=function(){ain.value=ain.value.replace(/[^0-9.]/g,'');fb.textContent='';};
+  ack.onclick=function(){
+    var txt=ain.value.trim(),x=parseFloat(txt),bs=L*W,rise=VS/bs;
+    if(txt===''||isNaN(x)){say('請先輸入數字。','no');return;}
+    if(Math.abs(x-rise)<=0.0051){say('答啱喇！水位上升咗 '+(Math.round(rise*100)/100)+' cm。試下轉個長闊再做一次。','ok');return;}
+    if(Math.abs(x-bs)<1e-6){say('你輸入嘅係底面積。水位上升嘅高度 = 石頭體積 ÷ 底面積。','no');return;}
+    if(Math.abs(x-VS)<1e-6){say('20 cm³ 係石頭嘅體積，唔係水位上升嘅高度。','no');return;}
+    if(Math.abs(x-(H0+rise))<=0.0051){say('你輸入嘅係放石頭後嘅水位。題目問嘅係水位上升咗幾多，要減去原本嘅水位。','no');return;}
+    say('未啱，再諗諗：高 = 體積 ÷ 底面積。如果除唔盡，請四捨五入至小數後兩位。','no');
+  };
+  rl.oninput=upd;rw.oninput=upd;
+  ar.onclick=function(){show=!show;ar.setAttribute('aria-pressed',show?'true':'false');upd();};
+  tg.onclick=function(){
+    placed=!placed;
+    tg.textContent=placed?'收回石頭':'放入石頭';
+    tg.setAttribute('aria-pressed',placed?'true':'false');
+    go(placed?1:0);
+  };
+  var dr=null;
+  cv.addEventListener('pointerdown',function(e){dr=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);});
+  cv.addEventListener('pointermove',function(e){
+    if(!dr)return;
+    yaw+=(e.clientX-dr[0])*.008;pit=Math.max(.12,Math.min(1.5,pit+(e.clientY-dr[1])*.006));
+    dr=[e.clientX,e.clientY];draw();
+  });
+  ['pointerup','pointercancel'].forEach(function(n){cv.addEventListener(n,function(){dr=null;});});
+  window.addEventListener('resize',resize);
+  if(window.matchMedia)window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+  document.querySelector('.part[data-p="4"]').onclick=function(){hub.hidden=true;p4.hidden=false;main.classList.add('wide');window.scrollTo(0,0);resize();};
+  document.getElementById('back4').onclick=function(){p4.hidden=true;hub.hidden=false;main.classList.remove('wide');};
+})();
+</script>
+</body>
+</html>
