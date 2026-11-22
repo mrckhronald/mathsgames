@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-HK"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>質數大冒險</title>
+<style>
+:root{--bg1:#3b4252;--bg2:#171b24;--card:#f3e6bf;--ink:#3a2a14;--mut:#7a6440;--line:#dcc994;--a:#3e7bd6;--b:#2e9d5b;--w:#d98a2b;--r:#c8453b;--p:#7a5bbf;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#3b4252;--bg2:#171b24;--card:#f3e6bf;--ink:#3a2a14;--mut:#7a6440;--line:#dcc994}}
+:root[data-theme="dark"]{--bg1:#3b4252;--bg2:#171b24;--card:#f3e6bf;--ink:#3a2a14;--mut:#7a6440;--line:#dcc994}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);background:repeating-linear-gradient(0deg,transparent 0 38px,rgba(0,0,0,.28) 38px 40px),repeating-linear-gradient(90deg,transparent 0 78px,rgba(0,0,0,.22) 78px 80px),linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;font-family:"Hiragino Maru Gothic ProN","PingFang HK","Noto Sans HK","Microsoft JhengHei",sans-serif;font-size:17px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:14px 14px 150px}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 8% 6%,rgba(255,160,50,.38),transparent 28%),radial-gradient(circle at 92% 6%,rgba(255,160,50,.38),transparent 28%);animation:fl 3s ease-in-out infinite alternate}
+@keyframes fl{to{opacity:.65}}
+.top{display:flex;justify-content:space-between;align-items:center;font-weight:800;margin-bottom:10px;color:#f3e6bf}
+#stars{color:var(--ink);background:var(--card);border-radius:99px;padding:4px 14px;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.card{background:var(--card);border:4px solid #6b4a22;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 6px 0 rgba(0,0,0,.45),inset 0 0 0 3px #e9d49a}
+h1{font-size:2.6rem;margin:0;line-height:1.1;text-align:center;letter-spacing:.06em;color:var(--ink);text-shadow:3px 3px 0 #e0b24a}
+h2{margin:0 0 8px;font-size:1.35rem}
+.sub{text-align:center;color:var(--mut);margin:6px 0 12px}
+.btn{display:block;width:100%;font:inherit;font-weight:800;font-size:1.15rem;color:#fff;border:0;border-radius:18px;padding:14px;margin:10px 0;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.28);touch-action:manipulation}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.28)}
+.btn:disabled{opacity:.45;cursor:default}
+.b1{background:var(--a)}.b2{background:var(--b)}.b3{background:var(--w)}.b4{background:var(--p)}.b5{background:var(--r)}
+.ghost{background:var(--line);color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.12)}
+input{font:inherit;width:100%;padding:12px;border-radius:14px;border:3px solid var(--line);background:var(--card);color:var(--ink);text-align:center}
+.grid{display:grid;gap:8px}
+.num{font:inherit;font-weight:800;font-size:1.3rem;aspect-ratio:1;border-radius:14px;border:3px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;padding:0}
+.num.on{opacity:.35}
+.boxes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.box{border-radius:18px;padding:10px;min-height:96px;border:3px dashed var(--line)}
+.box.A{background:rgba(79,140,255,.16)}.box.B{background:rgba(31,191,128,.16)}.box.C{grid-column:1/-1;background:rgba(255,159,67,.16)}
+.chip{display:inline-block;margin:3px;padding:2px 10px;border-radius:12px;font-weight:800;color:#fff}
+.A .chip{background:var(--a)}.B .chip{background:var(--b)}.C .chip{background:var(--w)}
+.chip small{display:block;font-size:.7rem;font-weight:600}
+.say2{background:rgba(123,92,255,.16);border-radius:16px;padding:10px 14px;margin-top:10px;font-weight:700}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{font:inherit;font-weight:800;font-size:1.7rem;padding:18px 6px;border-radius:18px;border:3px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.12);touch-action:manipulation}
+.opt.ok{background:rgba(31,191,128,.35);border-color:var(--b)}
+.opt.no{background:rgba(255,93,115,.35);border-color:var(--r)}
+.bar{height:12px;border-radius:9px;background:var(--line);overflow:hidden;margin:6px 0 14px}
+.bar i{display:block;height:100%;background:var(--b);transition:width .4s}
+.q{font-size:1.3rem;font-weight:800;margin-bottom:10px}
+.hint{background:rgba(255,159,67,.2);border-radius:14px;padding:8px 12px;margin-bottom:10px;font-weight:700}
+.fb{margin-top:12px;padding:12px;border-radius:16px;background:rgba(123,92,255,.14)}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin:10px 0}
+.stat div{background:var(--line);border-radius:16px;padding:10px 4px}.stat b{display:block;font-size:1.7rem}
+.mz{display:grid;gap:5px;margin-top:8px;padding:8px;background:#232733;border:3px solid #6b4a22;border-radius:10px}
+.cell{font:inherit;font-weight:800;aspect-ratio:1;padding:0;border-radius:6px;border:2px solid #2b2f3a;background:#5b6272;color:#f3e6bf;box-shadow:inset 0 -4px 0 rgba(0,0,0,.35);cursor:pointer;touch-action:manipulation}
+.cell.v{background:rgba(31,191,128,.4);border-color:var(--b)}
+.cell.me{background:var(--w);border-color:var(--w)}
+.cell.bad{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.mzh{display:flex;justify-content:space-between;font-weight:800}
+.hh{display:flex;justify-content:center;align-items:flex-end;gap:14px;margin-bottom:6px}.hh svg{width:84px;height:84px}.cell svg{width:80%;height:80%;pointer-events:none}.walker{position:fixed;z-index:8;pointer-events:none}.walker svg{display:block;width:80%;height:80%;margin:10%}.mzh svg{width:24px;height:24px;vertical-align:middle;margin-right:2px}.kp{color:#17803f;font-weight:900}.kc{color:#2563c9;font-weight:900}
+#bunny{position:fixed;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:flex-end;gap:8px;max-width:calc(100% - 20px);pointer-events:none;z-index:5}
+#say{background:var(--card);border-radius:18px 18px 4px 18px;padding:10px 14px;font-weight:700;font-size:.95rem;box-shadow:0 4px 0 rgba(0,0,0,.15);max-width:62vw}
+#rb{font:inherit;font-size:3.4rem;line-height:1;background:none;border:0;padding:0;cursor:pointer;pointer-events:auto;animation:hop 1.6s ease-in-out infinite}
+#hp{position:fixed;right:10px;bottom:calc(96px + env(safe-area-inset-bottom,0px));width:min(320px,calc(100% - 20px));z-index:6;background:var(--card);border:4px solid #6b4a22;border-radius:14px;padding:10px 14px;box-shadow:0 6px 0 rgba(0,0,0,.45)}
+#hp .btn{padding:10px;font-size:1rem;margin:6px 0}
+#ha{font-weight:800;margin-top:6px}
+@keyframes hop{50%{transform:translateY(-8px)}}
+.cf{position:fixed;top:-30px;font-size:1.8rem;animation:fall 2.4s linear forwards;z-index:9;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){#rb,.cell.bad,.cf,body::before{animation:none}}
+button:focus-visible,input:focus-visible{outline:4px solid var(--p);outline-offset:2px}
+</style></head><body>
+<div class="wrap">
+<div class="top"><span>🗡️ 質數大冒險</span><span id="stars">⭐ 0</span></div>
+
+<section class="scr" id="home">
+<div class="card">
+<div class="hh" id="hh"></div><h1>質數<br>大冒險</h1>
+<p class="sub">小勇者闖進地下城！分辨得出質數和合成數，才能打開寶箱！</p>
+
+<button class="btn b1" onclick="exInit()">📜 探索模式：數字的秘密</button>
+<button class="btn b2" onclick="go('pset');say('選擇難度，和我一起答 5 題！')">⚔️ 鞏固模式：地下城闖關</button>
+<button class="btn b3" onclick="mzMenu()">🗺️ 鞏固模式：地下迷宮尋寶</button>
+</div>
+<div class="card" id="qz"><h2>⚡ 快速測試</h2><p class="sub" style="margin:0 0 8px">開始前，先溫習一下：</p><div class="q" id="qt" style="font-size:1.9rem;text-align:center"></div><div class="opts"><button class="opt" data-v="質數" onclick="qk('質數')">質數</button><button class="opt" data-v="合成數" onclick="qk('合成數')">合成數</button></div><div id="qf"></div></div>
+</section>
+
+<section class="scr" id="explore" hidden>
+<div class="card"><h2>🔍 發現數字的秘密</h2>
+<p class="sub" style="margin:0 0 8px">點選 1 至 20 的數字卡，選出 8 個，看看機械人如何分類。</p>
+<div class="grid" id="exg" style="grid-template-columns:repeat(5,1fr)"></div>
+<div class="boxes" id="exb"></div>
+<div class="say2" id="exm"></div>
+<button class="btn b4" id="exbtn" onclick="exNext()"></button>
+<button class="btn ghost" onclick="go('home')">⬅ 返回</button></div>
+</section>
+
+<section class="scr" id="pset" hidden>
+<div class="card"><h2>🎮 選擇難度</h2>
+<button class="btn b2" onclick="prStart(1)">⭐ 簡單（1–30）</button>
+<button class="btn b3" onclick="prStart(2)">⭐⭐ 中等（1–50，有提示）</button>
+<button class="btn b5" onclick="prStart(3)">⭐⭐⭐ 困難（1–100，小心陷阱）</button>
+<button class="btn ghost" onclick="go('home')">⬅ 返回</button></div>
+</section>
+<section class="scr" id="pq" hidden><div class="card" id="pqc"></div></section>
+
+<section class="scr" id="mset" hidden>
+<div class="card"><h2>🗺️ 選擇迷宮</h2>
+<p class="sub" style="margin:0">由左下角的石門出發，只可以踏上質數格，前往右上角打開寶箱。</p>
+<button class="btn b2" onclick="mzStart(0)">⭐ 簡單 5×5</button>
+<button class="btn b3" onclick="mzStart(1)">⭐⭐ 中等 6×6</button>
+<button class="btn b5" onclick="mzStart(2)">⭐⭐⭐ 困難 9×9</button>
+<button class="btn b4" onclick="mzStart(3)">🌟 終極挑戰 9×9（1–100）</button>
+<button class="btn ghost" onclick="go('home')">⬅ 返回</button></div>
+</section>
+<section class="scr" id="maze" hidden><div class="card" id="mzc"></div></section>
+</div>
+<div id="hp" hidden><b>🤖 想知道甚麼？</b><button class="btn b2" onclick="hq(1)">1️⃣ 甚麼是質數</button><button class="btn b1" onclick="hq(2)">2️⃣ 甚麼是合成數</button><div id="ha"></div></div>
+<div id="bunny"><div id="say">我是機械人，忘記質數和合成數的意思就點我！</div><button id="rb" aria-label="機械人提示" onclick="hp()">🤖</button></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const isP=n=>{if(n<2)return 0;for(let i=2;i*i<=n;i++)if(n%i==0)return 0;return 1},
+fac=n=>{const r=[];for(let i=1;i<=n;i++)if(n%i==0)r.push(i);return r},
+rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[rnd(0,a.length-1)],
+shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]),
+kind=n=>n==1?'都不是':isP(n)?'質數':'合成數',
+why=n=>n==1?'1 只有 1 個因數，所以既不是質數，也不是合成數！':`${n} 的因數有 ${fac(n).join('、')}，共 ${fac(n).length} 個，所以是${kind(n)}。`;
+let stars=0;
+const svg=b=>'<svg viewBox="0 0 32 32" aria-hidden="true">'+b+'</svg>',
+HERO=svg('<path d="M3 10V22" stroke="#dfe7f2" stroke-width="2.2" stroke-linecap="round"/><path d="M1 22H5M3 22V25" stroke="#8a5a2b" stroke-width="2"/><path d="M6 14C8 5 18 2 27 5C21 7 22 11 24 14Z" fill="#2e9d5b" stroke="#17512f" stroke-width="1.2"/><ellipse cx="15.5" cy="14.5" rx="9.5" ry="2" fill="#2e9d5b" stroke="#17512f" stroke-width="1.2"/><circle cx="15.5" cy="19" r="5.5" fill="#ffd9a8" stroke="#8a5a2b"/><circle cx="13.5" cy="19.5" r="1" fill="#3a2a14"/><circle cx="17.5" cy="19.5" r="1" fill="#3a2a14"/><path d="M9 31V26Q9 23.5 15.5 23.5T22 26V31Z" fill="#43c477" stroke="#17512f" stroke-width="1.2"/><path d="M23 24H30V28Q26.5 31.5 23 28Z" fill="#c8453b" stroke="#5a1f1a"/><path d="M26.5 25V29" stroke="#ffd23f" stroke-width="1.5"/>'),
+CHEST=svg('<rect x="3" y="14" width="26" height="14" rx="2" fill="#a8672a" stroke="#4a2c0e" stroke-width="1.3"/><path d="M3 14Q3 6 16 6T29 14Z" fill="#c07a34" stroke="#4a2c0e" stroke-width="1.3"/><rect x="3" y="13" width="26" height="3" fill="#f2c94c" stroke="#4a2c0e"/><rect x="13" y="15" width="6" height="7" rx="1" fill="#ffd23f" stroke="#4a2c0e"/><circle cx="16" cy="18.5" r="1.2" fill="#4a2c0e"/>'),
+DOOR=svg('<path d="M5 30V14Q5 3 16 3T27 14V30Z" fill="#8a90a3" stroke="#2b2f3a" stroke-width="1.5"/><path d="M10 30V15Q10 8 16 8T22 15V30Z" fill="#241f33"/><circle cx="16" cy="21" r="1.6" fill="#ffd23f"/>'),
+HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21C4 14 2 10 2 7.5A5 5 0 0 1 12 6A5 5 0 0 1 22 7.5C22 10 20 14 12 21Z" fill="#e0453b" stroke="#6b1f1a" stroke-width="1.5"/></svg>';
+$('#hh').innerHTML=HERO+CHEST;
+const say=t=>{$('#say').textContent=t},
+go=id=>{$$('.scr').forEach(e=>e.hidden=e.id!=id);scrollTo(0,0)},
+addStar=k=>{stars+=k;$('#stars').textContent='⭐ '+stars},
+boom=()=>{for(let i=0;i<30;i++){const s=document.createElement('span');s.className='cf';s.textContent=pick(['⭐','🎉','✨','🎈']);s.style.left=rnd(0,94)+'vw';s.style.animationDelay=Math.random()*.6+'s';document.body.append(s);setTimeout(()=>s.remove(),3200)}},
+who=()=>'小勇者';
+
+function hp(){$('#hp').hidden=!$('#hp').hidden;$('#ha').textContent=''}
+function hq(k){$('#ha').textContent=k==1?'因數的數量只有 2 個，例如 2、3、5、7 等等':'因數的數量是 3 個或以上，例如 4、6、8、9 等等'}
+/* 快速測試 */
+const col=s=>s.replace(/合成數/g,'<span class="kc">合成數</span>').replace(/質數/g,'<span class="kp">質數</span>');
+let qn,qd;
+function qNew(){qd=0;const P=[],C=[];for(let i=2;i<=100;i++)(isP(i)?P:C).push(i);qn=Math.random()<.5?pick(P):pick(C);$('#qt').textContent=qn+' 這個數是？';$$('#qz .opt').forEach(b=>b.className='opt');$('#qf').innerHTML=''}
+function qk(v){if(qd)return;qd=1;const k=kind(qn),f=fac(qn),good=v==k;
+ $$('#qz .opt').forEach(b=>{if(b.dataset.v==k)b.classList.add('ok');else if(b.dataset.v==v)b.classList.add('no')});
+ const e=pick(good?['答對了！真棒！','正確！你真厲害！','答得好！繼續保持！']:['沒關係，從錯誤中學習會更進步！','只差一點點，加油！','別灰心，看清楚就會明白！']);
+ if(good){addStar(1);say('答對了，繼續加油！')}else say('看看因數就明白了！');
+ $('#qf').innerHTML=`<div class="fb">${good?'✅ ':'💪 '}${e}<br>${col(`${qn} 的因數有 ${f.join('、')}，因數的數量有 ${f.length} 個，所以是${k}。`)}</div><button class="btn b4" onclick="qNew()">下一題 ▶</button>`}
+qNew();
+/* 探究 */
+let ch=[],st=0;
+function exInit(){ch=[];st=0;exR();go('explore');say(who()+'，選出 8 個數字，看我怎樣分類！')}
+function exPick(n){if(ch.includes(n))return;if(ch.length>=8){say('已經選滿 8 個了！');return}ch.push(n);exR()}
+function exR(){
+ $('#exg').innerHTML=Array.from({length:20},(_,i)=>i+1).map(n=>`<button class="num ${ch.includes(n)?'on':''}" onclick="exPick(${n})">${n}</button>`).join('');
+ const chips=f=>ch.filter(f).map(n=>`<span class="chip">${n}${st>=2?`<small>${fac(n).length} 個因數</small>`:''}</span>`).join('');
+ const fl=f=>st>=2?ch.filter(f).map(n=>`<div>${n}：${fac(n).join('、')}</div>`).join(''):'';
+ const A=n=>n>1&&!isP(n),B=isP,C=n=>n==1;
+ $('#exb').innerHTML=`<div class="box A"><b>${st>=3?'🟦 合成數':'類別 A'}</b><div>${chips(A)}</div>${fl(A)}</div><div class="box B"><b>${st>=3?'🟩 質數':'類別 B'}</b><div>${chips(B)}</div>${fl(B)}</div>`+(ch.includes(1)?`<div class="box C"><b>${st>=3?'🟧 特別：1':'類別 C'}</b><div>${chips(C)}</div></div>`:'');
+ const m=['','💡 提示 1：試試列出它們的因數，再觀察！','📋 看看每組數的因數有多少個，有甚麼分別？','🎉 合成數：因數有 3 個或以上。質數：只有 2 個因數（1 和自己）。1 很特別，兩邊都不是！'];
+ $('#exm').textContent=st?m[st]:'選出數字，機械人會自動為你分類。';$('#exm').style.display='';
+ const b=$('#exbtn');b.disabled=st==0&&ch.length<4;b.textContent=['🔍 給我提示（最少選 4 個）','📋 看因數','🎉 揭曉答案','🔄 再玩一次'][st]
+}
+function exNext(){if(st==3){exInit();return}st++;if(st==3){addStar(1);boom()}exR()}
+
+/* 練習 */
+let Q;
+function mk(lv){
+ const max=[30,50,100][lv-1],P=[],Cm=[];for(let i=1;i<=max;i++)isP(i)?P.push(i):i>1&&Cm.push(i);
+ const odd=Cm.filter(n=>n%2&&n>8),pool=lv==3?odd:Cm,t=Math.random()<.5?'質數':'合成數';
+ const ans=t=='質數'?pick(P):pick(pool),oth=t=='質數'?shuf(pool).slice(0,3):shuf(P.concat([1])).slice(0,3);
+ return{t,ans,opts:shuf([ans,...oth])}
+}
+function prStart(lv){Q={lv,qs:Array.from({length:5},()=>mk(lv)),i:0,ok:0,streak:0,wrong:[],tm:[],tf:0};go('pq');prQ()}
+function prQ(){
+ const q=Q.qs[Q.i];Q.t0=Date.now();Q.done=0;
+ const opts=q.tf?['質數','合成數','都不是']:q.opts,h=Q.lv==2&&!q.tf?`<div class="hint">💡 ${q.t=='合成數'?'合成數可以被 2、3 或 5 整除，試試看！':'質數只有 2 個因數：1 和自己。'}</div>`:'';
+ $('#pqc').innerHTML=`<b>${Q.tf?'📝 錯題跟進':'第 '+(Q.i+1)+' / '+Q.qs.length+' 題'}</b><div class="bar"><i style="width:${Q.i/Q.qs.length*100}%"></i></div>
+ <div class="q">${q.tf?q.n+' 是質數、合成數，還是兩者都不是？':'🚪 地下城石門：選出一個'+q.t+'，才能打開！'}</div>${h}
+ <div class="opts" ${q.tf?'style="grid-template-columns:1fr"':''}>${opts.map(o=>`<button class="opt" data-v="${o}" onclick="prAns('${o}')">${o}</button>`).join('')}</div><div id="fb"></div>`;
+ say(q.tf?'這些數剛才答錯了，再試一次！':'仔細看，別被陷阱騙倒！')
+}
+function prAns(v){
+ if(Q.done)return;Q.done=1;const q=Q.qs[Q.i],right=q.tf?kind(q.n):String(q.ans),good=v==right;
+ Q.tm.push((Date.now()-Q.t0)/1000);
+ $$('#pqc .opt').forEach(b=>{if(b.dataset.v==right)b.classList.add('ok');else if(b.dataset.v==v)b.classList.add('no')});
+ let f=why(q.tf?q.n:q.ans);
+ if(good){Q.ok++;Q.streak++;addStar(1);say(Q.streak>=3?`太厲害了！連續答對 ${Q.streak} 題！`:'完全正確！');if(Q.streak==3)boom()}
+ else{Q.streak=0;if(!q.tf){Q.wrong.push(+v);f+='<br>你選的 '+why(+v)}else Q.wrong.push(q.n);say('沒關係，看看解釋再試一次！')}
+ const last=Q.i+1>=Q.qs.length;
+ $('#fb').innerHTML=`<div class="fb">${good?'✅ ':'❌ '}${f}</div><button class="btn b4" onclick="${last?'prEnd()':'Q.i++;prQ()'}">${last?'🏁 查看成績':'下一題 ▶'}</button>`
+}
+function prEnd(){
+ const n=Q.qs.length,avg=(Q.tm.reduce((a,b)=>a+b,0)/n).toFixed(1),w=[...new Set(Q.wrong)];
+ if(Q.ok==n)boom();
+ $('#pqc').innerHTML=`<h2>🎉 完成練習！</h2><div class="stat"><div><b>${Q.ok*20}</b>分數</div><div><b>${Math.round(Q.ok/n*100)}%</b>答對率</div><div><b>${avg}秒</b>平均用時</div></div>
+ ${w.length?`<button class="btn b3" onclick="prFix()">📝 錯題跟進練習（${w.length} 題）</button>`:'<div class="fb">🌟 全部答對！你是質數小專家！</div>'}
+ <button class="btn b2" onclick="prStart(${Q.lv})">🔄 再玩一次</button><button class="btn ghost" onclick="go('home');say('回到主頁了！')">🏠 返回主頁</button>`;
+ say(Q.ok==n?'滿分！太棒了！':'再練習一次會更好！')
+}
+function prFix(){const w=[...new Set(Q.wrong)];Q={lv:Q.lv,qs:w.map(n=>({tf:1,n})),i:0,ok:0,streak:0,wrong:[],tm:[]};prQ()}
+
+/* 迷宮 */
+const LV=[[5,30],[6,30],[9,30],[9,100]];let M;
+function mzMenu(){go('mset');say('只可以踏上質數格，要小心！')}
+function mzStart(l){
+ const[n,max]=LV[l],P=[],all=[];for(let i=1;i<=max;i++){all.push(i);isP(i)&&P.push(i)}
+ const g=Array.from({length:n},()=>Array.from({length:n},()=>Math.random()<.3?pick(P):pick(all)));
+ let r=n-1,c=0;g[r][c]=0;
+ while(r>0||c<n-1){const o=[];if(r>0)o.push(0);if(c<n-1)o.push(1);pick(o)?c++:r--;g[r][c]=pick(P)}
+ g[0][n-1]=-1;M={n,l,g,pos:[n-1,0],lives:3,moves:0,seen:new Set([(n-1)*n]),end:0,msg:''};go('maze');mzR();say('出發！只踏質數格，向上、下、左、右移動。')
+}
+function mzR(msg){
+ const{n,g,pos,lives,moves}=M,fs=n==9?'.85rem':'1.3rem';
+ let h=`<div class="mzh"><span>${HEART.repeat(lives)||'💔'}</span><span>👣 ${moves}</span></div><div class="mz" style="grid-template-columns:repeat(${n},1fr);font-size:${fs}">`;
+ for(let r=0;r<n;r++)for(let c=0;c<n;c++){const me=pos[0]==r&&pos[1]==c,v=g[r][c],cl=me?'me':M.seen.has(r*n+c)?'v':'';
+  h+=`<button class="cell ${cl}" id="c${r}_${c}" onclick="mzMove(${r},${c})">${me?HERO:v==-1?CHEST:v==0?DOOR:v}</button>`}
+ h+=`</div><div class="say2">${msg||'由石門出發，前往右上角的寶箱。'}</div>`;
+ if(M.end)h+=`${M.end==1&&M.l<3?`<button class="btn b2" onclick="mzStart(${M.l+1})">▶ 下一關</button>`:''}<button class="btn b3" onclick="mzStart(${M.l})">🔄 再玩一次</button>`;
+ $('#mzc').innerHTML=h+`<button class="btn ghost" onclick="mzMenu()">⬅ 選擇其他迷宮</button>`
+}
+function walk(r,c,done){
+ const a=$(`#c${M.pos[0]}_${M.pos[1]}`),b=$(`#c${r}_${c}`);
+ if(!a||!b||!a.animate||matchMedia('(prefers-reduced-motion:reduce)').matches){done();return}
+ M.busy=1;const ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect(),sv=a.querySelector('svg'),h=document.createElement('div');
+ h.className='walker';h.innerHTML=HERO;h.style.cssText+=`left:${ra.left}px;top:${ra.top}px;width:${ra.width}px;height:${ra.height}px`;
+ document.body.append(h);if(sv)sv.style.visibility='hidden';
+ const dx=rb.left-ra.left,dy=rb.top-ra.top;h.firstChild.style.scale=dx<0?'-1 1':'1 1';
+ h.firstChild.animate([{transform:'translateY(0) rotate(-7deg)'},{transform:'translateY(-8px) rotate(7deg)'},{transform:'translateY(0) rotate(-7deg)'},{transform:'translateY(-8px) rotate(7deg)'},{transform:'translateY(0) rotate(0)'}],{duration:420});
+ h.animate([{transform:'translate(0,0)'},{transform:`translate(${dx}px,${dy}px)`}],{duration:420,easing:'ease-in-out',fill:'forwards'}).onfinish=()=>{h.remove();M.busy=0;done()}
+}
+function mzMove(r,c){
+ if(M.end||M.busy)return;const[pr,pc]=M.pos,v=M.g[r][c];
+ if(Math.abs(r-pr)+Math.abs(c-pc)!=1){say('只可以向上、下、左、右移動一步！');return}
+ if(v<=0||isP(v)){walk(r,c,()=>{M.pos=[r,c];M.moves++;M.seen.add(r*M.n+c);
+  if(v==-1){M.end=1;addStar(3);boom();say(`${who()}，你找到寶藏了！`);mzR('🏆 成功！'+M.moves+' 步找到寶藏，獲得 3 顆星！');return}
+  say('好！繼續前進！');mzR()});return}
+ M.lives--;say(why(v));
+ if(!M.lives){M.end=2;mzR(why(v)+' 你的生命用完了，再試一次！');return}
+ mzR('❌ '+why(v));$(`#c${r}_${c}`).classList.add('bad')
+}
+</script></body></html>
